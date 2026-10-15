@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.example.gestion_movil.data.model.QrResult
 import com.example.gestion_movil.lecturaQR.QrScanner
 import com.example.gestion_movil.ui.viewmodel.QrViewModel
-
+// linia 86
 @Composable
 fun QrScannerScreen(
     viewModel: QrViewModel,

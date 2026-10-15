@@ -52,7 +52,7 @@ fun QrScanner(
         factory = { previewView },
         modifier = modifier.fillMaxSize()
     )
-
+//
     // Gestionar la cámara fuera de AndroidView.update
     DisposableEffect(context, lifecycleOwner, previewView) {
 

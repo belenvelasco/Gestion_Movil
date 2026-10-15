@@ -1,5 +1,5 @@
 package com.example.gestion_movil.data.repository
-
+//
 import com.example.gestion_movil.data.model.QrResult
 
 class QrRepository {

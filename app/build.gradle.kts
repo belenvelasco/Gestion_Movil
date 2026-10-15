@@ -45,7 +45,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     testImplementation(libs.junit)
-
+//
     implementation("androidx.compose.runtime:runtime-livedata:1.12.1")
     //camarax QR
     val camerax_version= "1.4.2"
