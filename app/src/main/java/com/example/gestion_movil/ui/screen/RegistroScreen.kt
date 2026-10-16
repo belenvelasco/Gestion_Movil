@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.gestion_movil.ui.viewmodel.UsuarioViewModel
+import java.nio.file.WatchEvent
 
 @Composable
 fun RegistroScreen(
@@ -128,6 +130,14 @@ fun RegistroScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Registrar")
+        }
+
+        //Boton:escaaner codigo QR
+        OutlinedButton(
+            onClick = {navController.navigate("Qr")},
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Escanear QR")
         }
     }
 }

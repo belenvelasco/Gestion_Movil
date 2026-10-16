@@ -33,32 +33,32 @@ fun QrScanner(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    // Mantener actualizado el callback sin reiniciar CameraX
+    // mantiene sin reiniciar camarax
     val currentCallback = rememberUpdatedState(onQrCodeScanned)
 
-    // Crear una única vista previa
+    // crao una vista previa
     val previewView = remember(context) {
         PreviewView(context).apply {
             scaleType = PreviewView.ScaleType.FILL_CENTER
 
-            // Mayor compatibilidad con emuladores
+            // compatibilidad con emulador
             implementationMode =
                 PreviewView.ImplementationMode.COMPATIBLE
         }
     }
 
-    // Mostrar la cámara en Compose
+    // mostrar camara
     AndroidView(
         factory = { previewView },
         modifier = modifier.fillMaxSize()
     )
-//
-    // Gestionar la cámara fuera de AndroidView.update
+
+    // gestiona camara
     DisposableEffect(context, lifecycleOwner, previewView) {
 
         val cameraExecutor = Executors.newSingleThreadExecutor()
 
-        // Configurar ML Kit para reconocer únicamente QR
+        // reconose unicamente el QR
         val options = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
             .build()
@@ -68,14 +68,14 @@ fun QrScanner(
         val disposed = AtomicBoolean(false)
         val detected = AtomicBoolean(false)
 
-        // Configurar la vista previa
+        // vista previa
         val preview = Preview.Builder()
             .build()
             .apply {
                 setSurfaceProvider(previewView.surfaceProvider)
             }
 
-        // Configurar el análisis de imágenes
+        // analisis de imagenes
         val imageAnalysis = ImageAnalysis.Builder()
             .setBackpressureStrategy(
                 ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
@@ -148,7 +148,7 @@ fun QrScanner(
             }
         }
 
-        // Obtener el proveedor de CameraX
+        // camara
         val cameraProviderFuture =
             ProcessCameraProvider.getInstance(context)
 
@@ -164,7 +164,7 @@ fun QrScanner(
 
                     if (!disposed.get()) {
 
-                        // Seleccionar cámara trasera
+                        // camara tracera
                         val cameraSelector =
                             CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -195,7 +195,7 @@ fun QrScanner(
 
         }, ContextCompat.getMainExecutor(context))
 
-        // Liberar recursos al salir de la pantalla
+        // salir de pantalla
         onDispose {
 
             disposed.set(true)

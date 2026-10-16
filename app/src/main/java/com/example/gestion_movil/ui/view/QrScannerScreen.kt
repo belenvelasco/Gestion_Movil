@@ -74,7 +74,7 @@ fun QrScannerScreen(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Usar el nuevo scanner con CameraX
+            // scanner con CameraX
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -82,7 +82,7 @@ fun QrScannerScreen(
             ) {
                 QrScanner(
                     onQrCodeScanned = { QrContent ->
-                        // Procesar el QR detectado
+                        // Procesar el QR
                         viewModel.onQrDetected(QrContent)
                         isScanning = false
                         Toast.makeText(context, "QR detectado!", Toast.LENGTH_SHORT).show()
@@ -90,7 +90,7 @@ fun QrScannerScreen(
                     modifier = Modifier.fillMaxSize()
                 )
 
-                // Overlay para ayudar al escaneo
+                // Overlay para al escaneo
                 Surface(
                     modifier = Modifier
                         .size(250.dp)
