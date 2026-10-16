@@ -40,7 +40,7 @@ class UsuarioViewModel : ViewModel() {
         _estado.update {
             it.copy(
                 clave = valor,
-                errores = it.errores.copy(clave = null)
+                errores = it.errores.copy(Clave = null)
             )
         }
     }
@@ -75,7 +75,7 @@ class UsuarioViewModel : ViewModel() {
                 "Correo inválido"
             else null,
 
-            clave = if (estadoActual.clave.length < 6)
+            Clave = if (estadoActual.clave.length < 6)
                 "Debe tener al menos 6 caracteres"
             else null,
 
@@ -87,7 +87,7 @@ class UsuarioViewModel : ViewModel() {
         val hayErrores = listOfNotNull(
             errores.nombre,
             errores.correo,
-            errores.clave,
+            errores.Clave,
             errores.direccion
         ).isNotEmpty()
 
