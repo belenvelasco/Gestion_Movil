@@ -77,9 +77,9 @@ fun RegistroScreen(
             onValueChange = viewModel::onClaveChange,
             label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
-            isError = estado.errores.clave != null,
+            isError = estado.errores.Clave!= null,
             supportingText = {
-                estado.errores.clave?.let {
+                estado.errores.Clave?.let {
                     Text(
                         text = it,
                         color = MaterialTheme.colorScheme.error
