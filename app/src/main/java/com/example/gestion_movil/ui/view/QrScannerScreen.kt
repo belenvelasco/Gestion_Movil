@@ -83,7 +83,7 @@ fun QrScannerScreen(
                 QrScanner(
                     onQrCodeScanned = { QrContent ->
                         // Procesar el QR detectado
-                        viewModel.onQrDetected(qrContent)
+                        viewModel.onQrDetected(QrContent)
                         isScanning = false
                         Toast.makeText(context, "QR detectado!", Toast.LENGTH_SHORT).show()
                     },
