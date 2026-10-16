@@ -5,14 +5,13 @@ plugins {
 
 android {
     namespace = "com.example.gestion_movil"
-    compileSdk {
-        version = release(37)
-    }
+    compileSdk = 37
+
 
     defaultConfig {
         applicationId = "com.example.gestion_movil"
         minSdk = 24
-        targetSdk = 37
+        targetSdk  = 34
         versionCode = 1
         versionName = "1.0"
 
