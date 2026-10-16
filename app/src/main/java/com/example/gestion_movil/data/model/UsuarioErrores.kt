@@ -6,5 +6,4 @@ data class  UsuarioErrores(
     val correo: String? = null,
     val Clave: String? = null,
     val direccion: String? = null,
-    val clave: String?
 )
