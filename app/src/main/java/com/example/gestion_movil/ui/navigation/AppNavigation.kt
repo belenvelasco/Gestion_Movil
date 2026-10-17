@@ -1,5 +1,6 @@
-package com.example.gestion_movil.navigation
+package com.example.gestion_movil.ui.navigation
 
+import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -54,7 +55,7 @@ fun AppNavigation(){
                 viewModel = QrViewModel,
                 hasCameraPermission = hasCameraPermission,
                 onRequestPermission = {
-                    permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                    permissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             )
         }
