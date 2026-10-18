@@ -1,5 +1,8 @@
 package com.example.gestion_movil.ui.oportunidad
 
+import android.content.Context
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,20 +28,39 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.gestion_movil.Ubicasion.UbicacionHelper
+import java.util.Locale
 
+// Sirve para registrar (id = 0) y para modificar (id > 0)
 @Composable
 fun OportunidadFormScreen(
-    id : Int,
-    viewModel : OportunidadViewModel,
+    id: Int,
+    viewModel: OportunidadViewModel,
     onVolver: () -> Unit
-){
+) {
     val estado by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(id) {viewModel.cargar(id) }
+    val context = LocalContext.current
 
+    // Pide el permiso de ubicación; si lo conceden, obtiene la ubicación
+    val lanzadorPermiso = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { resultado ->
+        if (resultado.values.any { it }) {
+            pedirUbicacion(context, viewModel)
+        } else {
+            viewModel.onUbicacionError("Permiso de ubicación denegado")
+        }
+    }
+
+    // Carga el formulario vacío o con los datos de la oportunidad
+    LaunchedEffect(id) { viewModel.cargar(id) }
+
+    // Al guardar correctamente se vuelve a la lista
     LaunchedEffect(estado.guardadoExitosamente) {
-        if (estado.guardadoExitosamente){
+        if (estado.guardadoExitosamente) {
             viewModel.consumirGuardado()
             onVolver()
         }
@@ -51,30 +74,30 @@ fun OportunidadFormScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            if (id == 0) "Nueva oportunidad" else "Editar oportunidad" ,
+            if (id == 0) "Nueva oportunidad" else "Editar oportunidad",
             style = MaterialTheme.typography.headlineSmall
         )
 
         OutlinedTextField(
             value = estado.nombre,
-            onValueChange = viewModel::onNombreChange,
-            label = {Text("Nombre de la oportunidad")},
+            onValueChange = viewModel::onNombre,
+            label = { Text("Nombre de la oportunidad") },
             isError = estado.nombreError != null,
-            supportingText = {Text(estado.nombreError ?: "")},
+            supportingText = { Text(estado.nombreError ?: "") },
             modifier = Modifier.fillMaxWidth()
         )
 
         CampoDesplegable(
             label = "Tipo de oportunidad",
             valor = estado.tipo,
-            opciones = OportunidadOpciones.tipos,
+            opciones = viewModel.tipos,
             error = estado.tipoError,
-            onSeleccion = viewModel::onTipoChange
+            onSeleccion = viewModel::onTipo
         )
 
         OutlinedTextField(
             value = estado.descripcion,
-            onValueChange = viewModel::onDescripcionChange,
+            onValueChange = viewModel::onDescripcion,
             label = { Text("Descripción") },
             minLines = 3,
             isError = estado.descripcionError != null,
@@ -84,7 +107,7 @@ fun OportunidadFormScreen(
 
         OutlinedTextField(
             value = estado.fuente,
-            onValueChange = viewModel::onFuenteChange,
+            onValueChange = viewModel::onFuente,
             label = { Text("Fuente de información") },
             isError = estado.fuenteError != null,
             supportingText = { Text(estado.fuenteError ?: "") },
@@ -94,34 +117,72 @@ fun OportunidadFormScreen(
         CampoDesplegable(
             label = "Prioridad",
             valor = estado.prioridad,
-            opciones = OportunidadOpciones.prioridades,
+            opciones = viewModel.prioridades,
             error = estado.prioridadError,
-            onSeleccion = viewModel::onPrioridadChange
+            onSeleccion = viewModel::onPrioridad
         )
 
         CampoDesplegable(
             label = "Potencial comercial",
             valor = estado.potencial,
-            opciones = OportunidadOpciones.potenciales,
+            opciones = viewModel.potenciales,
             error = estado.potencialError,
-            onSeleccion = viewModel::onPotencialChange
+            onSeleccion = viewModel::onPotencial
         )
 
         CampoDesplegable(
             label = "Estado de gestión",
             valor = estado.estado,
-            opciones = OportunidadOpciones.estados,
-            error = null,
-            onSeleccion = viewModel::onEstadoChange
+            opciones = viewModel.estados,
+            error = estado.estadoError,
+            onSeleccion = viewModel::onEstado
         )
 
         OutlinedTextField(
             value = estado.observaciones,
-            onValueChange = viewModel::onObservacionesChange,
+            onValueChange = viewModel::onObservaciones,
             label = { Text("Observaciones (opcional)") },
             minLines = 3,
             modifier = Modifier.fillMaxWidth()
         )
+
+        // Recurso nativo: ubicación (opcional)
+        Text("Ubicación (opcional)", style = MaterialTheme.typography.titleSmall)
+        val lat = estado.latitud
+        val lng = estado.longitud
+        Text(
+            if (lat != null && lng != null) {
+                "Lat: ${"%.5f".format(Locale.US, lat)}  ·  Lng: ${"%.5f".format(Locale.US, lng)}"
+            } else {
+                "Sin ubicación registrada"
+            },
+            style = MaterialTheme.typography.bodyMedium
+        )
+        if (estado.ubicacionMensaje != null) {
+            Text(
+                estado.ubicacionMensaje ?: "",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+        OutlinedButton(
+            onClick = {
+                if (UbicacionHelper.tienePermiso(context)) {
+                    pedirUbicacion(context, viewModel)
+                } else {
+                    lanzadorPermiso.launch(UbicacionHelper.PERMISOS)
+                }
+            },
+            enabled = !estado.ubicando,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(if (estado.ubicando) "Obteniendo ubicación..." else "Obtener ubicación actual")
+        }
+        if (lat != null && lng != null) {
+            TextButton(onClick = { viewModel.quitarUbicacion() }) {
+                Text("Quitar ubicación")
+            }
+        }
 
         Button(
             onClick = { viewModel.guardar() },
@@ -136,6 +197,20 @@ fun OportunidadFormScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Cancelar")
+        }
+    }
+}
+
+// Llama al GPS y avisa al ViewModel el resultado
+private fun pedirUbicacion(context: Context, viewModel: OportunidadViewModel) {
+    viewModel.iniciarUbicacion()
+    UbicacionHelper.obtenerUbicacion(context) { ubicacion ->
+        if (ubicacion != null) {
+            viewModel.onUbicacionObtenida(ubicacion.latitude, ubicacion.longitude)
+        } else {
+            viewModel.onUbicacionError(
+                "No se pudo obtener la ubicación. Revisa que el GPS esté activado."
+            )
         }
     }
 }

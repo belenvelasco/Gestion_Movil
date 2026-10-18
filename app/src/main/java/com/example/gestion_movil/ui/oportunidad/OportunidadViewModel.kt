@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,22 +21,80 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
         AppDatabase.getInstance(app).oportunidadDao()
     )
 
+    // Opciones definidas por el equipo
+    val tipos = listOf(
+        "Evento corporativo", "Feria empresarial", "Actividad municipal",
+        "Jornada de beneficios", "Feria institucional", "Activación comercial", "Otra"
+    )
+    val prioridades = listOf("Alta", "Media", "Baja")
+    val potenciales = listOf("Alto", "Medio", "Bajo")
+    val estados = listOf(
+        "Evento identificado", "Contacto pendiente", "Contacto realizado",
+        "Propuesta enviada", "En espera de respuesta", "Participación confirmada",
+        "Oportunidad descartada"
+    )
+
+    // Lista reactiva: se actualiza sola al registrar o modificar
     val lista: StateFlow<List<OportunidadEntity>> = repository.oportunidades
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // ---- Búsqueda y filtro de la lista ----
+    val opcionesFiltro = listOf("Todas") + prioridades
+
+    private val _busqueda = MutableStateFlow("")
+    val busqueda: StateFlow<String> = _busqueda.asStateFlow()
+
+    private val _filtroPrioridad = MutableStateFlow("Todas")
+    val filtroPrioridad: StateFlow<String> = _filtroPrioridad.asStateFlow()
+
+    val listaFiltrada: StateFlow<List<OportunidadEntity>> =
+        combine(lista, _busqueda, _filtroPrioridad) { todas, texto, prioridad ->
+            val q = texto.trim()
+            todas.filter { o ->
+                val coincidePrioridad = prioridad == "Todas" || o.prioridad == prioridad
+                val coincideTexto = q.isEmpty() ||
+                        o.nombre.contains(q, ignoreCase = true) ||
+                        o.tipo.contains(q, ignoreCase = true) ||
+                        o.descripcion.contains(q, ignoreCase = true) ||
+                        o.fuente.contains(q, ignoreCase = true)
+                coincidePrioridad && coincideTexto
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    fun onBusqueda(v: String) {
+        _busqueda.value = v
+    }
+
+    fun onFiltroPrioridad(v: String) {
+        _filtroPrioridad.value = v
+    }
 
     private val _uiState = MutableStateFlow(OportunidadUiState())
     val uiState: StateFlow<OportunidadUiState> = _uiState.asStateFlow()
 
     // ---- Eventos que llegan desde el formulario ----
-    fun onNombreChange(v: String) = _uiState.update { it.copy(nombre = v, nombreError = null) }
-    fun onTipoChange(v: String) = _uiState.update { it.copy(tipo = v, tipoError = null) }
-    fun onDescripcionChange(v: String) = _uiState.update { it.copy(descripcion = v, descripcionError = null) }
-    fun onFuenteChange(v: String) = _uiState.update { it.copy(fuente = v, fuenteError = null) }
-    fun onPrioridadChange(v: String) = _uiState.update { it.copy(prioridad = v, prioridadError = null) }
-    fun onPotencialChange(v: String) = _uiState.update { it.copy(potencial = v, potencialError = null) }
-    fun onEstadoChange(v: String) = _uiState.update { it.copy(estado = v) }
-    fun onObservacionesChange(v: String) = _uiState.update { it.copy(observaciones = v) }
+    fun onNombre(v: String) = _uiState.update { it.copy(nombre = v, nombreError = null) }
+    fun onTipo(v: String) = _uiState.update { it.copy(tipo = v, tipoError = null) }
+    fun onDescripcion(v: String) = _uiState.update { it.copy(descripcion = v, descripcionError = null) }
+    fun onFuente(v: String) = _uiState.update { it.copy(fuente = v, fuenteError = null) }
+    fun onPrioridad(v: String) = _uiState.update { it.copy(prioridad = v, prioridadError = null) }
+    fun onPotencial(v: String) = _uiState.update { it.copy(potencial = v, potencialError = null) }
+    fun onEstado(v: String) = _uiState.update { it.copy(estado = v, estadoError = null) }
+    fun onObservaciones(v: String) = _uiState.update { it.copy(observaciones = v) }
 
+    // ---- Ubicación (recurso nativo) ----
+    fun iniciarUbicacion() =
+        _uiState.update { it.copy(ubicando = true, ubicacionMensaje = null) }
+
+    fun onUbicacionObtenida(latitud: Double, longitud: Double) = _uiState.update {
+        it.copy(latitud = latitud, longitud = longitud, ubicando = false, ubicacionMensaje = null)
+    }
+
+    fun onUbicacionError(mensaje: String) =
+        _uiState.update { it.copy(ubicando = false, ubicacionMensaje = mensaje) }
+
+    fun quitarUbicacion() =
+        _uiState.update { it.copy(latitud = null, longitud = null, ubicacionMensaje = null) }
 
     // Prepara el formulario: vacío (id = 0, nueva) o cargado (editar)
     fun cargar(id: Int) {
@@ -53,7 +112,9 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
                         prioridad = e.prioridad,
                         potencial = e.potencial,
                         estado = e.estado,
-                        observaciones = e.observaciones
+                        observaciones = e.observaciones,
+                        latitud = e.latitud,
+                        longitud = e.longitud
                     )
                 }
             }
@@ -72,14 +133,16 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
             prioridadError = if (s.prioridad.isBlank()) obligatorio else null,
             potencialError = when {
                 s.potencial.isBlank() -> obligatorio
-                s.potencial !in OportunidadOpciones.potenciales -> "Opción no válida"
+                s.potencial !in potenciales -> "Opción no válida"
                 else -> null
             },
+            estadoError = if (s.estado.isBlank()) obligatorio else null
         )
         _uiState.value = nuevo
         return listOf(
             nuevo.nombreError, nuevo.tipoError, nuevo.descripcionError,
-            nuevo.fuenteError, nuevo.prioridadError, nuevo.potencialError
+            nuevo.fuenteError, nuevo.prioridadError, nuevo.potencialError,
+            nuevo.estadoError
         ).all { it == null }
     }
 
@@ -98,11 +161,17 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
                     prioridad = s.prioridad,
                     potencial = s.potencial,
                     estado = s.estado,
-                    observaciones = s.observaciones.trim()
+                    observaciones = s.observaciones.trim(),
+                    latitud = s.latitud,
+                    longitud = s.longitud
                 )
             )
             _uiState.update { it.copy(guardando = false, guardadoExitosamente = true) }
         }
+    }
+
+    fun eliminar(oportunidad: OportunidadEntity) {
+        viewModelScope.launch { repository.eliminar(oportunidad) }
     }
 
     fun consumirGuardado() = _uiState.update { it.copy(guardadoExitosamente = false) }
@@ -112,16 +181,6 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
         val texto = codigo.trim()
         return lista.value.firstOrNull {
             it.id.toString() == texto || it.nombre.equals(texto, ignoreCase = true)
-        }
-    }
-    fun abrirDesdeQr(contenido: String, onEncontrada: (Int) -> Unit, onNoEncontrada: () -> Unit) {
-        val id = contenido.trim().removePrefix("OPORTUNIDAD:").toIntOrNull()
-        if (id == null) {
-            onNoEncontrada()
-            return
-        }
-        viewModelScope.launch {
-            if (repository.obtenerPorId(id) != null) onEncontrada(id) else onNoEncontrada()
         }
     }
 }

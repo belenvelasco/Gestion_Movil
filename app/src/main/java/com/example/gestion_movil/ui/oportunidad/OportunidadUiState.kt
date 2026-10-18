@@ -10,6 +10,10 @@ data class OportunidadUiState(
     val potencial: String = "",
     val estado: String = "Evento identificado",
     val observaciones: String = "",
+    val latitud: Double? = null,
+    val longitud: Double? = null,
+    val ubicando: Boolean = false,
+    val ubicacionMensaje: String? = null,
     val fechaDeteccion: Long = 0L,
     val nombreError: String? = null,
     val tipoError: String? = null,
@@ -17,21 +21,7 @@ data class OportunidadUiState(
     val fuenteError: String? = null,
     val prioridadError: String? = null,
     val potencialError: String? = null,
+    val estadoError: String? = null,
     val guardando: Boolean = false,
     val guardadoExitosamente: Boolean = false
 )
-
-object OportunidadOpciones {
-    val tipos = listOf(
-        "Evento corporativo", "Feria empresarial", "Actividad municipal",
-        "Jornada de beneficios", "Feria institucional",
-        "Actividad de trabajadores", "Activación comercial", "Otra instancia relevante"
-    )
-    val prioridades = listOf("Alta", "Media", "Baja")
-    val potenciales = listOf("Alto", "Medio", "Bajo")
-    val estados = listOf(
-        "Evento identificado", "Contacto pendiente", "Contacto realizado",
-        "Propuesta enviada", "En espera de respuesta",
-        "Participación confirmada", "Oportunidad descartada"
-    )
-}

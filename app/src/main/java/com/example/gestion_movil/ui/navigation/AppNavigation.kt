@@ -109,31 +109,20 @@ fun AppNavigation(){
             )
         }
 
-        composable (Rutas.Qr){
+
+        composable(Rutas.Qr) {
+            // Mantiene la lista suscrita para poder buscar por código
             oportunidadViewModel.lista.collectAsState()
-            LaunchedEffect(Unit) {qrViewModel.clearResult() }
+            LaunchedEffect(Unit) { qrViewModel.clearResult() }
 
             QrScannerScreen(
-
                 viewModel = qrViewModel,
                 hasCameraPermission = hasCameraPermission,
                 onRequestPermission = {
-                    permissionLauncher.launch(Manifest.permission.CAMERA)
+                    permissionLauncher.launch(android.Manifest.permission.CAMERA)
                 },
-                buscarOportunidad = { codigo -> oportunidadViewModel.buscarPorCodigo(codigo)},
-                onAbrirOportunidad = { contenido ->
-                    oportunidadViewModel.abrirDesdeQr(
-                        contenido = "",
-                        onEncontrada = { id -> navController.navigate(Rutas.form(id)) },
-                        onNoEncontrada = {
-                            Toast.makeText(
-                                context,
-                                "El código no corresponde a una oportunidad",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    )
-                }
+                buscarOportunidad = { codigo -> oportunidadViewModel.buscarPorCodigo(codigo) },
+                onAbrirOportunidad = { id -> navController.navigate(Rutas.form(id)) }
             )
         }
     }

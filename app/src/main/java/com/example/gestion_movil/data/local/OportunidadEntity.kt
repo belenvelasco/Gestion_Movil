@@ -14,6 +14,8 @@ data class OportunidadEntity(
     val potencial: String,
     val estado: String,
     val observaciones: String,
+    val latitud: Double? = null,
+    val longitud: Double? = null,
     val fechaDeteccion: Long = System.currentTimeMillis(),
     val fechaActualizacion: Long = System.currentTimeMillis()
 )
