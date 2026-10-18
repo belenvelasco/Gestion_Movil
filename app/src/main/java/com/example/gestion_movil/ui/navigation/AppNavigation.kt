@@ -1,10 +1,12 @@
 package com.example.gestion_movil.ui.navigation
 
 import android.Manifest
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,17 +19,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.gestion_movil.lecturaQR.CameraPermissionHelper
+import com.example.gestion_movil.ui.Qr.QrScannerScreen
 import com.example.gestion_movil.ui.Qr.QrViewModel
 import com.example.gestion_movil.ui.login.LoginScreen
 import com.example.gestion_movil.ui.login.LoginViewModel
 import com.example.gestion_movil.ui.menu.MenuScreen
+import com.example.gestion_movil.ui.oportunidad.ListaOportunidadesScreen
+import com.example.gestion_movil.ui.oportunidad.OportunidadFormScreen
 import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
-import com.example.gestion_movil.ui.screen.RegistroScreen
-import com.example.gestion_movil.ui.screen.ResumenScreen
-import com.example.gestion_movil.ui.view.QrScannerScreen
-import com.example.gestion_movil.ui.viewmodel.QrViewModel
-import com.example.gestion_movil.ui.viewmodel.UsuarioViewModel
-
 
 object Rutas{
     const val  LOGIN = "login"
@@ -49,8 +48,8 @@ fun AppNavigation(){
     val context = LocalContext.current
 
     val loginViewModel: LoginViewModel = viewModel()
-    val oprtunidadViewModel: OportunidadViewModel = viewModel()
-    val QrViewModel : QrViewModel = viewModel()
+    val oportunidadViewModel: OportunidadViewModel = viewModel()
+    val qrViewModel : QrViewModel = viewModel()
 
     var hasCameraPermission by remember {
         mutableStateOf(CameraPermissionHelper.hasCameraPermission(context))
@@ -71,7 +70,7 @@ fun AppNavigation(){
                 viewModel = loginViewModel,
                 onLoginExitoso = {
                     navController.navigate(Rutas.MENU){
-                        popUpToId(Rutas.LOGIN){inclosive = true}
+                        popUpTo(Rutas.LOGIN){inclusive = true}
                     }
                 }
             )
@@ -92,7 +91,7 @@ fun AppNavigation(){
 
         composable(Rutas.LISTA){
             ListaOportunidadesScreen(
-                viewModel = oprtunidadViewModel,
+                viewModel = oportunidadViewModel,
                 onNueva = {navController.navigate(Rutas.form(0))},
                 onEditar = {id -> navController.navigate(Rutas.form(id))}
             )
@@ -105,23 +104,36 @@ fun AppNavigation(){
             val id = entrada.arguments?.getInt("id")?: 0
             OportunidadFormScreen(
                 id = id,
-                ViewModel = oprtunidadViewModel,
+                viewModel = oportunidadViewModel,
                 onVolver = {navController.popBackStack()}
             )
         }
 
         composable (Rutas.Qr){
-            oprtunidadViewModel.lista.collectAsState()
-            LaunchedEffect(Unit) {QrViewModel.clearResult() }
+            oportunidadViewModel.lista.collectAsState()
+            LaunchedEffect(Unit) {qrViewModel.clearResult() }
 
             QrScannerScreen(
-                ViewModel = QrViewModel,
+
+                viewModel = qrViewModel,
                 hasCameraPermission = hasCameraPermission,
                 onRequestPermission = {
-                    permissionLauncher.launch(androidx.Manifest.permission.CAMARA)
+                    permissionLauncher.launch(Manifest.permission.CAMERA)
                 },
-                buscarportunidad = { codigo -> oportunidadViewModel.buscarPorCodigo(codigo)},
-                onAbrirOportunidad = {id -> navController.navigate(Rutas,form(id))}
+                buscarOportunidad = { codigo -> oportunidadViewModel.buscarPorCodigo(codigo)},
+                onAbrirOportunidad = { contenido ->
+                    oportunidadViewModel.abrirDesdeQr(
+                        contenido = "",
+                        onEncontrada = { id -> navController.navigate(Rutas.form(id)) },
+                        onNoEncontrada = {
+                            Toast.makeText(
+                                context,
+                                "El código no corresponde a una oportunidad",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
+                }
             )
         }
     }

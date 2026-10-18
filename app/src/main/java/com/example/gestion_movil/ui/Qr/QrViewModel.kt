@@ -1,6 +1,8 @@
 package com.example.gestion_movil.ui.Qr
 
 import androidx.lifecycle.ViewModel
+import com.example.gestion_movil.data.model.QrResult
+import com.example.gestion_movil.data.repository.QrRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

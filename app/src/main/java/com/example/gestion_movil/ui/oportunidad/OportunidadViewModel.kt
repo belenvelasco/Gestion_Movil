@@ -114,4 +114,14 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
             it.id.toString() == texto || it.nombre.equals(texto, ignoreCase = true)
         }
     }
+    fun abrirDesdeQr(contenido: String, onEncontrada: (Int) -> Unit, onNoEncontrada: () -> Unit) {
+        val id = contenido.trim().removePrefix("OPORTUNIDAD:").toIntOrNull()
+        if (id == null) {
+            onNoEncontrada()
+            return
+        }
+        viewModelScope.launch {
+            if (repository.obtenerPorId(id) != null) onEncontrada(id) else onNoEncontrada()
+        }
+    }
 }

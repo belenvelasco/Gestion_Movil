@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.gestion_movil.data.local.OportunidadEntity
 import com.example.gestion_movil.lecturaQR.QrScanner
 
 @Composable

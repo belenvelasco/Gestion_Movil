@@ -1,5 +1,6 @@
 package com.example.gestion_movil.ui.menu
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,11 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.w3c.dom.Text
 
 @Composable
 fun MenuScreen(
@@ -23,10 +24,10 @@ fun MenuScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp)
+            .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.CenterVertically)
     ) {
-        Text("Menu principal",stayle = MaterialTheme.typography.headlineMedium)
+        Text("Menu principal",style = MaterialTheme.typography.headlineMedium)
 
         Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
             Text("ver portunidades")

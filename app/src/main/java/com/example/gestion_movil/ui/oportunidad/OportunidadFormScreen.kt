@@ -1,6 +1,5 @@
 package com.example.gestion_movil.ui.oportunidad
 
-import android.R
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,18 +18,18 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun OportunidadFormScreen(
     id : Int,
-    ViewModel : OportunidadViewModel,
+    viewModel : OportunidadViewModel,
     onVolver: () -> Unit
 ){
     val estado by viewModel.uiState.collectAsState()
@@ -52,13 +51,13 @@ fun OportunidadFormScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            if (if == 0) "nueva oportunidad" else "editar oportunidad" ,
+            if (id == 0) "nueva oportunidad" else "editar oportunidad" ,
             style = MaterialTheme.typography.headlineSmall
         )
 
         OutlinedTextField(
             value = estado.nombre,
-            onValueChange = viewModel::onNombre,
+            onValueChange = viewModel::onNombreChange,
             label = {Text("nombre de la oportunidad")},
             isError = estado.nombreError != null,
             supportingText = {Text(estado.nombreError ?: "")},
@@ -68,14 +67,14 @@ fun OportunidadFormScreen(
         CampoDesplegable(
             label = "Tipo de oportunidad",
             valor = estado.tipo,
-            opciones = viewModel.tipos,
+            opciones = OportunidadOpciones.tipos,
             error = estado.tipoError,
-            onSeleccion = viewModel::onTipo
+            onSeleccion = viewModel::onTipoChange
         )
 
         OutlinedTextField(
             value = estado.descripcion,
-            onValueChange = viewModel::onDescripcion,
+            onValueChange = viewModel::onDescripcionChange,
             label = { Text("Descripción") },
             minLines = 3,
             isError = estado.descripcionError != null,
@@ -85,7 +84,7 @@ fun OportunidadFormScreen(
 
         OutlinedTextField(
             value = estado.fuente,
-            onValueChange = viewModel::onFuente,
+            onValueChange = viewModel::onFuenteChange,
             label = { Text("Fuente de información") },
             isError = estado.fuenteError != null,
             supportingText = { Text(estado.fuenteError ?: "") },
@@ -95,30 +94,30 @@ fun OportunidadFormScreen(
         CampoDesplegable(
             label = "Prioridad",
             valor = estado.prioridad,
-            opciones = viewModel.prioridades,
+            opciones = OportunidadOpciones.prioridades,
             error = estado.prioridadError,
-            onSeleccion = viewModel::onPrioridad
+            onSeleccion = viewModel::onPrioridadChange
         )
 
         CampoDesplegable(
             label = "Potencial comercial",
             valor = estado.potencial,
-            opciones = viewModel.potenciales,
+            opciones = OportunidadOpciones.potenciales,
             error = estado.potencialError,
-            onSeleccion = viewModel::onPotencial
+            onSeleccion = viewModel::onPotencialChange
         )
 
         CampoDesplegable(
             label = "Estado de gestión",
             valor = estado.estado,
-            opciones = viewModel.estados,
-            error = estado.estadoError,
-            onSeleccion = viewModel::onEstado
+            opciones = OportunidadOpciones.estados,
+            error = null,
+            onSeleccion = viewModel::onEstadoChange
         )
 
         OutlinedTextField(
             value = estado.observaciones,
-            onValueChange = viewModel::onObservaciones,
+            onValueChange = viewModel::onObservacionesChange,
             label = { Text("Observaciones (opcional)") },
             minLines = 3,
             modifier = Modifier.fillMaxWidth()
@@ -185,3 +184,5 @@ private fun CampoDesplegable(
                 )
             }
         }
+    }
+}
