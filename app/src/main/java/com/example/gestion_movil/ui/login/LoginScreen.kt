@@ -1,6 +1,7 @@
 package com.example.gestion_movil.ui.login
 
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,13 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import org.w3c.dom.Text
 
 @Composable
 fun LoginScreen(
@@ -25,7 +28,7 @@ fun LoginScreen(
 
     LaunchedEffect(estado.loginExitoso) {
         if (estado.loginExitoso) {
-            ViewModel.consumirLogin()
+            viewModel.consumirLogin()
             onLoginExitoso()
         }
     }
@@ -34,42 +37,42 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp, alignment = androidx.compose.ui.Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.CenterVertically)
 
     ) {
-        Text("Gestion de oportunidades", stayle = MaterialTheme.typography.headlineMedium )
-        Text("Iniciar sesion con la cuenta ejecutiva", stayle = MaterialTheme.typography.bodyMedium)
+        Text("Gestion de oportunidades", style = MaterialTheme.typography.headlineMedium )
+        Text("Iniciar sesion con la cuenta ejecutiva", style = MaterialTheme.typography.bodyMedium)
 
         OutlinedTextField(
             value = estado.usuario,
-            onValueChange = ViewModel::onUsuario,
+            onValueChange = viewModel::onUsuario,
             label = { Text("usuario")},
             singleLine = true,
-            isError = estado.usuarioError!=null,
-            supportingText = { Text(estado.usuarioError ?: "")},
+            isError = estado.UsuarioError !=null,
+            supportingText = { Text(estado.UsuarioError ?: "")},
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value =  estado.clave,
-            onValueChange = ViewModel:: onClave,
-            label = { Text("clave")},
+            onValueChange = viewModel:: onClave,
+            label = { Text("Clave")},
             singleLine = true,
-            VisualTransformation = PasswordVisualTransformation(),
+            visualTransformation = PasswordVisualTransformation(),
             isError = estado.ClaveError != null,
-            SupportingText = { Text(estado.ClaveError?: "")},
+            supportingText = { Text(estado.ClaveError?: "")},
             modifier = Modifier.fillMaxWidth()
         )
 
         Button(
-            onClick = {ViewModel.iniciarSesion()},
+            onClick = {viewModel.iniciarSesion()},
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Iniciar sesion")
         }
 
         Text(
-            "Cuenta de prube: ${LOginViewModel.USUARIO_PRUEBA} / ${LoginViewModel.CLAVE_PRUEBA}",
+            "Cuenta de prueba: ${LoginViewModel.USUARO_PRUEBA} / ${LoginViewModel.CLAVE_PRUEBA}",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

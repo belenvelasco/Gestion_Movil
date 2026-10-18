@@ -2,6 +2,7 @@ package com.example.gestion_movil.ui.login
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -25,7 +26,7 @@ class LoginViewModel : ViewModel(){
 
     fun onUsuario(v: String) = _uistate.update { it.copy(usuario = v, UsuarioError = null) }
 
-    fun  onClave(v: String) = _uistate.update { it.copy(Clave = v, claveError = null) }
+    fun onClave(v: String) = _uistate.update { it.copy(clave = v, ClaveError = null) }
 
     fun iniciarSesion(){
         val s = _uistate.value

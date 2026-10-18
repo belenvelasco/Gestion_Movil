@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestion_movil.data.local.AppDatabase
+import com.example.gestion_movil.data.local.OportunidadEntity
 import com.example.gestion_movil.data.repository.OportunidadRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,14 +27,15 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
     val uiState: StateFlow<OportunidadUiState> = _uiState.asStateFlow()
 
     // ---- Eventos que llegan desde el formulario ----
-    fun onNombre(v: String) = _uiState.update { it.copy(nombre = v, nombreError = null) }
-    fun onTipo(v: String) = _uiState.update { it.copy(tipo = v, tipoError = null) }
-    fun onDescripcion(v: String) = _uiState.update { it.copy(descripcion = v, descripcionError = null) }
-    fun onFuente(v: String) = _uiState.update { it.copy(fuente = v, fuenteError = null) }
-    fun onPrioridad(v: String) = _uiState.update { it.copy(prioridad = v, prioridadError = null) }
-    fun onPotencial(v: String) = _uiState.update { it.copy(potencial = v, potencialError = null) }
-    fun onEstado(v: String) = _uiState.update { it.copy(estado = v, estadoError = null) }
-    fun onObservaciones(v: String) = _uiState.update { it.copy(observaciones = v) }
+    fun onNombreChange(v: String) = _uiState.update { it.copy(nombre = v, nombreError = null) }
+    fun onTipoChange(v: String) = _uiState.update { it.copy(tipo = v, tipoError = null) }
+    fun onDescripcionChange(v: String) = _uiState.update { it.copy(descripcion = v, descripcionError = null) }
+    fun onFuenteChange(v: String) = _uiState.update { it.copy(fuente = v, fuenteError = null) }
+    fun onPrioridadChange(v: String) = _uiState.update { it.copy(prioridad = v, prioridadError = null) }
+    fun onPotencialChange(v: String) = _uiState.update { it.copy(potencial = v, potencialError = null) }
+    fun onEstadoChange(v: String) = _uiState.update { it.copy(estado = v) }
+    fun onObservacionesChange(v: String) = _uiState.update { it.copy(observaciones = v) }
+
 
     // Prepara el formulario: vacío (id = 0, nueva) o cargado (editar)
     fun cargar(id: Int) {
@@ -70,16 +72,14 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
             prioridadError = if (s.prioridad.isBlank()) obligatorio else null,
             potencialError = when {
                 s.potencial.isBlank() -> obligatorio
-                s.potencial !in potenciales -> "Opción no válida"
+                s.potencial !in OportunidadOpciones.potenciales -> "Opción no válida"
                 else -> null
             },
-            estadoError = if (s.estado.isBlank()) obligatorio else null
         )
         _uiState.value = nuevo
         return listOf(
             nuevo.nombreError, nuevo.tipoError, nuevo.descripcionError,
-            nuevo.fuenteError, nuevo.prioridadError, nuevo.potencialError,
-            nuevo.estadoError
+            nuevo.fuenteError, nuevo.prioridadError, nuevo.potencialError
         ).all { it == null }
     }
 

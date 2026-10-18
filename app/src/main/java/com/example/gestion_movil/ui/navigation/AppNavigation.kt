@@ -17,9 +17,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.gestion_movil.lecturaQR.CameraPermissionHelper
+import com.example.gestion_movil.ui.Qr.QrViewModel
 import com.example.gestion_movil.ui.login.LoginScreen
 import com.example.gestion_movil.ui.login.LoginViewModel
 import com.example.gestion_movil.ui.menu.MenuScreen
+import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
 import com.example.gestion_movil.ui.screen.RegistroScreen
 import com.example.gestion_movil.ui.screen.ResumenScreen
 import com.example.gestion_movil.ui.view.QrScannerScreen
@@ -65,7 +67,7 @@ fun AppNavigation(){
         startDestination = Rutas.LOGIN
     ){
         composable(Rutas.LOGIN){
-            LOginScreen(
+            LoginScreen(
                 viewModel = loginViewModel,
                 onLoginExitoso = {
                     navController.navigate(Rutas.MENU){
@@ -89,7 +91,7 @@ fun AppNavigation(){
         }
 
         composable(Rutas.LISTA){
-            ListaOportunidadScreen(
+            ListaOportunidadesScreen(
                 viewModel = oprtunidadViewModel,
                 onNueva = {navController.navigate(Rutas.form(0))},
                 onEditar = {id -> navController.navigate(Rutas.form(id))}
