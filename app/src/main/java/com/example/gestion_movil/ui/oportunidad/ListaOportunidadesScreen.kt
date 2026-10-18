@@ -43,7 +43,7 @@ fun ListaOportunidadesScreen(
 
             if (lista.isEmpty()){
                 Text(
-                    "Aun no hay oportunidades registradas. " +
+                    "Aún no hay oportunidades registradas. " +
                     "Pulsar \"Agregar oportunidad\" para crear la primera",
                     style = MaterialTheme.typography.bodyMedium
                 )

@@ -31,9 +31,9 @@ import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
 object Rutas{
     const val  LOGIN = "login"
 
-    const val  MENU = " menu"
+    const val  MENU = "menu"
 
-    const val  LISTA = " lista"
+    const val  LISTA = "lista"
 
     const val FORM = "form/{id}"
 
@@ -121,19 +121,7 @@ fun AppNavigation(){
                     permissionLauncher.launch(Manifest.permission.CAMERA)
                 },
                 buscarOportunidad = { codigo -> oportunidadViewModel.buscarPorCodigo(codigo)},
-                onAbrirOportunidad = { contenido ->
-                    oportunidadViewModel.abrirDesdeQr(
-                        contenido = "",
-                        onEncontrada = { id -> navController.navigate(Rutas.form(id)) },
-                        onNoEncontrada = {
-                            Toast.makeText(
-                                context,
-                                "El código no corresponde a una oportunidad",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    )
-                }
+                onAbrirOportunidad = { id -> navController.navigate(Rutas.form(id)) }
             )
         }
     }

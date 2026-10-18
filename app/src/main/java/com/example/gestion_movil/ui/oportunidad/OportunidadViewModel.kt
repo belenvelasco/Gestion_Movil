@@ -53,6 +53,7 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
                         prioridad = e.prioridad,
                         potencial = e.potencial,
                         estado = e.estado,
+                        fechaDeteccion = e.fechaDeteccion,
                         observaciones = e.observaciones
                     )
                 }
@@ -98,7 +99,8 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
                     prioridad = s.prioridad,
                     potencial = s.potencial,
                     estado = s.estado,
-                    observaciones = s.observaciones.trim()
+                    observaciones = s.observaciones.trim(),
+                    fechaDeteccion = if (s.fechaDeteccion == 0L) System.currentTimeMillis() else s.fechaDeteccion
                 )
             )
             _uiState.update { it.copy(guardando = false, guardadoExitosamente = true) }
