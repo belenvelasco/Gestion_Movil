@@ -1,6 +1,6 @@
 package com.example.gestion_movil.ui.login
 
-import android.R
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,14 +15,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.w3c.dom.Text
-import java.nio.file.WatchEvent
 
 @Composable
-fun LOginScreen(
-    ViewModel: LoginViewModel,
+fun LoginScreen(
+    viewModel: LoginViewModel,
     onLoginExitoso: () -> Unit
 ) {
-    val estado by ViewModel.uiState.collectAsState()
+    val estado by viewModel.uiState.collectAsState()
 
     LaunchedEffect(estado.loginExitoso) {
         if (estado.loginExitoso) {
@@ -42,7 +41,7 @@ fun LOginScreen(
         Text("Iniciar sesion con la cuenta ejecutiva", stayle = MaterialTheme.typography.bodyMedium)
 
         OutlinedTextField(
-            value = estado.Usuario,
+            value = estado.usuario,
             onValueChange = ViewModel::onUsuario,
             label = { Text("usuario")},
             singleLine = true,
@@ -52,7 +51,7 @@ fun LOginScreen(
         )
 
         OutlinedTextField(
-            value =  estado.Clave,
+            value =  estado.clave,
             onValueChange = ViewModel:: onClave,
             label = { Text("clave")},
             singleLine = true,

@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 class OportunidadRepository(private val dao: OportunidadDao) {
 
-    val oportunidades: Flow<List<OportunidadEntity>> dao.observarTodas()
+    val oportunidades: Flow<List<OportunidadEntity>> = dao.observarTodas()
 
 
-    suspend fun obtenerPorId(id: Int): OportunidadEntity? = dao.optenerPorId(id)
+    suspend fun obtenerPorId(id: Int): OportunidadEntity? = dao.obtenerPorId(id)
 
     suspend fun guardar(oportunidad: OportunidadEntity): Long =
         dao.guardar(oportunidad.copy(FechaActualizacion = System.currentTimeMillis()))

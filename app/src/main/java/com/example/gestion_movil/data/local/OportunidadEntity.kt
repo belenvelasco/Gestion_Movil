@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "oportunidades")
 data class OportunidadEntity(
-    @PrimaryKey(autoGenerte = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val nombre: String,
     val tipo: String,
     val descripcion: String,
