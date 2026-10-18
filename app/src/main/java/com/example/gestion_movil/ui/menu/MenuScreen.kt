@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MenuScreen(
     onVerOportunidades: () -> Unit,
-    onnuevaOportunidades: () -> Unit,
+    onNuevaOportunidades: () -> Unit,
     onEscanerQr: () -> Unit,
     onCerrarSesion: () -> Unit
 ){
@@ -30,11 +30,11 @@ fun MenuScreen(
         Text("Menu principal",style = MaterialTheme.typography.headlineMedium)
 
         Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
-            Text("ver portunidades")
+            Text("Ver oportunidades")
         }
 
-        Button(onClick = onnuevaOportunidades, modifier = Modifier.fillMaxWidth()) {
-            Text("nueva oportunidad")
+        Button(onClick = onNuevaOportunidades, modifier = Modifier.fillMaxWidth()) {
+            Text("Nueva oportunidad")
         }
 
         Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {

@@ -36,15 +36,15 @@ fun ListaOportunidadesScreen(
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             Text(
-                "oportunidades",
+                "Oportunidades",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
             if (lista.isEmpty()){
                 Text(
-                    "Aun no hay oportunidades registradas" +
-                    "pulsar \"agregar oportunidad\" para crear la primera",
+                    "Aun no hay oportunidades registradas. " +
+                    "Pulsar \"Agregar oportunidad\" para crear la primera",
                     style = MaterialTheme.typography.bodyMedium
                 )
             } else{
@@ -83,9 +83,10 @@ private fun OportunidadItem(oportunidad : OportunidadEntity, onClick:() ->  Unit
         Column(Modifier.padding(16.dp)) {
             Text(oportunidad.nombre, style = MaterialTheme.typography.titleMedium)
             Text("Tipo: ${oportunidad.tipo}", style = MaterialTheme.typography.bodyMedium)
-            Text("prioridad: ${oportunidad.prioridad}", style = MaterialTheme.typography.bodyMedium)
+            Text("Prioridad: ${oportunidad.prioridad}", style = MaterialTheme.typography.bodyMedium)
+            Text("Estado: ${oportunidad.estado}", style = MaterialTheme.typography.bodyMedium)
             Text(
-                "dectectado: $fecha · codigo: ${oportunidad.id}",
+                "Detectado: $fecha · Código: ${oportunidad.id}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

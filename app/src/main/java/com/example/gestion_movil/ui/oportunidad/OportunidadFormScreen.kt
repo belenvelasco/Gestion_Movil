@@ -51,14 +51,14 @@ fun OportunidadFormScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            if (id == 0) "nueva oportunidad" else "editar oportunidad" ,
+            if (id == 0) "Nueva oportunidad" else "Editar oportunidad" ,
             style = MaterialTheme.typography.headlineSmall
         )
 
         OutlinedTextField(
             value = estado.nombre,
             onValueChange = viewModel::onNombreChange,
-            label = {Text("nombre de la oportunidad")},
+            label = {Text("Nombre de la oportunidad")},
             isError = estado.nombreError != null,
             supportingText = {Text(estado.nombreError ?: "")},
             modifier = Modifier.fillMaxWidth()

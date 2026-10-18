@@ -79,7 +79,7 @@ fun AppNavigation(){
         composable(Rutas.MENU){
             MenuScreen(
                 onVerOportunidades = {navController.navigate(Rutas.LISTA)},
-                onnuevaOportunidades = { navController.navigate(Rutas.form(0))},
+                onNuevaOportunidades = { navController.navigate(Rutas.form(0))},
                 onEscanerQr = { navController.navigate(Rutas.Qr)},
                 onCerrarSesion = {
                     navController.navigate(Rutas.LOGIN){

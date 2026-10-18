@@ -30,12 +30,12 @@ class LoginViewModel : ViewModel(){
 
     fun iniciarSesion(){
         val s = _uistate.value
-        val usuarioError = if (s.usuario.isBlank()) "campo obligatorio" else null
+        val usuarioError = if (s.usuario.isBlank()) "Campo obligatorio" else null
         val  claveError = when {
-            s.clave.isBlank() -> "campo obligatorio"
+            s.clave.isBlank() -> "Campo obligatorio"
             usuarioError == null &&
                     (s.usuario.trim() != USUARO_PRUEBA || s.clave !=CLAVE_PRUEBA) ->
-                        "usuario o clave incorrecta"
+                        "Usuario o clave incorrecta"
             else -> null
         }
         _uistate.update {

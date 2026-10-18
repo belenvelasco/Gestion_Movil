@@ -21,3 +21,4 @@ class QrViewModel : ViewModel() {
         _qrResult.value = null
     }
 }
+

@@ -58,7 +58,7 @@ fun QrScannerScreen(
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                "Para escanear códigos QR necesitamos acceso a la cámara",
+                "Para escanear códigos QR se necesita acceso a la cámara",
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )

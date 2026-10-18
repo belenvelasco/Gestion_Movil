@@ -40,13 +40,13 @@ fun LoginScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.CenterVertically)
 
     ) {
-        Text("Gestion de oportunidades", style = MaterialTheme.typography.headlineMedium )
-        Text("Iniciar sesion con la cuenta ejecutiva", style = MaterialTheme.typography.bodyMedium)
+        Text("Gestión de oportunidades", style = MaterialTheme.typography.headlineMedium )
+        Text("Iniciar sesión con la cuenta ejecutiva", style = MaterialTheme.typography.bodyMedium)
 
         OutlinedTextField(
             value = estado.usuario,
             onValueChange = viewModel::onUsuario,
-            label = { Text("usuario")},
+            label = { Text("Usuario")},
             singleLine = true,
             isError = estado.UsuarioError !=null,
             supportingText = { Text(estado.UsuarioError ?: "")},
@@ -68,7 +68,7 @@ fun LoginScreen(
             onClick = {viewModel.iniciarSesion()},
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Iniciar sesion")
+            Text("Iniciar sesión")
         }
 
         Text(
