@@ -15,5 +15,5 @@ data class OportunidadEntity(
     val estado: String,
     val observaciones: String,
     val fechaDeteccion: Long = System.currentTimeMillis(),
-    val FechaActualizacion: Long = System.currentTimeMillis()
+    val fechaActualizacion: Long = System.currentTimeMillis()
 )

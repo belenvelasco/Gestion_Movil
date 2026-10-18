@@ -17,7 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.gestion_movil.lecturaQR.CameraPermissionHelper
-import com.example.gestion_movil.ui.login.LOginScreen
+import com.example.gestion_movil.ui.login.LoginScreen
 import com.example.gestion_movil.ui.login.LoginViewModel
 import com.example.gestion_movil.ui.menu.MenuScreen
 import com.example.gestion_movil.ui.screen.RegistroScreen

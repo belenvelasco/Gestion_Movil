@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface OportunidadDao {
-    @Query(" SELECT * FROM oportunidades ORDER BY fechaActualizacion DESC")
+    @Query("SELECT * FROM oportunidades ORDER BY fechaActualizacion DESC")
     fun observarTodas(): Flow<List<OportunidadEntity>>
 
     @Query("SELECT * FROM oportunidades WHERE id = :id")
@@ -20,5 +20,4 @@ interface OportunidadDao {
 
     @Delete
     suspend fun eliminar(oportunidad: OportunidadEntity)
-
 }
