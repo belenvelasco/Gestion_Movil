@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gestion_movil.data.local.OportunidadEntity
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 @Composable
@@ -31,7 +32,7 @@ fun ListaOportunidadesScreen(
     onNueva : () -> Unit,
     onEditar : (Int) -> Unit
 ){
-    val lista by viewModel().lista.collectAsState()
+    val lista by ViewModel().lista.collectAsState()
 
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
