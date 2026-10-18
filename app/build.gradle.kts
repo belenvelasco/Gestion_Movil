@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -45,21 +46,25 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
-//
-    implementation("androidx.compose.runtime:runtime-livedata:1.12.1")
-    //camarax QR
-    val camerax_version= "1.4.2"
+
+    // ViewModel + lifecycle para Compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Room (persistencia local)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // CameraX (cámara para leer QR)
+    val camerax_version = "1.4.2"
     implementation("androidx.camera:camera-core:$camerax_version")
     implementation("androidx.camera:camera-camera2:$camerax_version")
     implementation("androidx.camera:camera-lifecycle:$camerax_version")
     implementation("androidx.camera:camera-view:$camerax_version")
 
-    //zxing QR
-    implementation("com.google.zxing:core:3.5.3")
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
-    //ML kit barcode Scanning QR
+    // ML Kit: lectura de códigos QR
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
-
 
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
