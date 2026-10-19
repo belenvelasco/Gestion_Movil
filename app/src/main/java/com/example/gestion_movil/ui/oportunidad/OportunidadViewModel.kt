@@ -21,7 +21,6 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
         AppDatabase.getInstance(app).oportunidadDao()
     )
 
-    // Opciones definidas por el equipo
     val tipos = listOf(
         "Evento corporativo", "Feria empresarial", "Actividad municipal",
         "Jornada de beneficios", "Feria institucional", "Activación comercial", "Otra"
@@ -34,11 +33,11 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
         "Oportunidad descartada"
     )
 
-    // Lista reactiva: se actualiza sola al registrar o modificar
+    // se actualiza sola al registrar o modificar
     val lista: StateFlow<List<OportunidadEntity>> = repository.oportunidades
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // ---- Búsqueda y filtro de la lista ----
+    //  Búsqueda y filtro de la lista
     val opcionesFiltro = listOf("Todas") + prioridades
 
     private val _busqueda = MutableStateFlow("")
@@ -72,7 +71,7 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
     private val _uiState = MutableStateFlow(OportunidadUiState())
     val uiState: StateFlow<OportunidadUiState> = _uiState.asStateFlow()
 
-    // ---- Eventos que llegan desde el formulario ----
+    //  Eventos que llegan desde el formulario
     fun onNombre(v: String) = _uiState.update { it.copy(nombre = v, nombreError = null) }
     fun onTipo(v: String) = _uiState.update { it.copy(tipo = v, tipoError = null) }
     fun onDescripcion(v: String) = _uiState.update { it.copy(descripcion = v, descripcionError = null) }
@@ -82,7 +81,7 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
     fun onEstado(v: String) = _uiState.update { it.copy(estado = v, estadoError = null) }
     fun onObservaciones(v: String) = _uiState.update { it.copy(observaciones = v) }
 
-    // ---- Ubicación (recurso nativo) ----
+    // Ubicación
     fun iniciarUbicacion() =
         _uiState.update { it.copy(ubicando = true, ubicacionMensaje = null) }
 
@@ -96,7 +95,7 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
     fun quitarUbicacion() =
         _uiState.update { it.copy(latitud = null, longitud = null, ubicacionMensaje = null) }
 
-    // Prepara el formulario: vacío (id = 0, nueva) o cargado (editar)
+    // Prepara el formulario: vacío (id) o cargado (editar)
     fun cargar(id: Int) {
         viewModelScope.launch {
             if (id == 0) {
@@ -122,7 +121,7 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    // Validación: los errores se guardan en el UiState y se ven en cada campo
+    // Validación: los errores se guardan en el UiState
     private fun validar(): Boolean {
         val s = _uiState.value
         val obligatorio = "Campo obligatorio"

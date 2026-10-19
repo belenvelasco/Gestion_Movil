@@ -47,7 +47,7 @@ fun ListaOportunidadesScreen(
     onNueva: () -> Unit,
     onEditar: (Int) -> Unit
 ) {
-    // Las listas vienen de Room como Flow: se actualizan solas
+    // listas vienen de Room como Flow: se actualizan solas
     val todas by viewModel.lista.collectAsState()
     val filtradas by viewModel.listaFiltrada.collectAsState()
     val busqueda by viewModel.busqueda.collectAsState()
@@ -165,7 +165,7 @@ fun ListaOportunidadesScreen(
     }
 }
 
-// Abre la ubicación guardada en la app de mapas del teléfono
+// Abre la ubicación guardada en la app de mapas
 private fun abrirMapa(context: android.content.Context, oportunidad: OportunidadEntity) {
     val lat = oportunidad.latitud ?: return
     val lng = oportunidad.longitud ?: return

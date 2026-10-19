@@ -45,7 +45,7 @@ object UbicacionHelper {
 
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        // Con permiso "aproximado" solo se puede usar el proveedor de red
+        // Con permiso solo se puede usar el proveedor de red
         val candidatos = if (tienePermisoPreciso(context)) {
             listOf(LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER)
         } else {
@@ -59,7 +59,7 @@ object UbicacionHelper {
                 return
             }
 
-            // 1) Si hay una ubicación reciente guardada, se usa directamente
+            //  Si hay una ubicación reciente guardada, se usa directamente
             val reciente = proveedores
                 .mapNotNull { manager.getLastKnownLocation(it) }
                 .filter { System.currentTimeMillis() - it.time < EDAD_MAXIMA_MS }
@@ -69,7 +69,7 @@ object UbicacionHelper {
                 return
             }
 
-            // 2) Si no, se pide una ubicación nueva
+            // Si no, se pideubicación nueva
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 pedirActual(manager, context, proveedores, onResultado)
             } else {
@@ -80,7 +80,7 @@ object UbicacionHelper {
         }
     }
 
-    // Android 11 o superior: getCurrentLocation, probando proveedor por proveedor
+    // probando proveedor por proveedor
     @RequiresApi(Build.VERSION_CODES.R)
     @SuppressLint("MissingPermission")
     private fun pedirActual(
@@ -110,7 +110,7 @@ object UbicacionHelper {
         }
     }
 
-    // Android 10 o inferior: una sola actualización con tiempo máximo de espera
+    //una sola actualización con tiempo máximo de espera
     @SuppressLint("MissingPermission")
     @Suppress("DEPRECATION")
     private fun pedirUnaVez(

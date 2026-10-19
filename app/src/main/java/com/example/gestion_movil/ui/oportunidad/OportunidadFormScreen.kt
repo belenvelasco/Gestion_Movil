@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.example.gestion_movil.Ubicacion.UbicacionHelper
 import java.util.Locale
 
-// Sirve para registrar (id = 0) y para modificar (id > 0)
+// Sirve para registrar (id) y para modificar (id )
 @Composable
 fun OportunidadFormScreen(
     id: Int,
@@ -44,7 +44,7 @@ fun OportunidadFormScreen(
 
     val context = LocalContext.current
 
-    // Pide el permiso de ubicación; si lo conceden, obtiene la ubicación
+    // Pide el permiso de ubicación; si lo conceden se obtiene la ubicación
     val lanzadorPermiso = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { resultado ->
@@ -146,7 +146,7 @@ fun OportunidadFormScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Recurso nativo: ubicación (opcional)
+        //  ubicación (opcional)
         Text("Ubicación (opcional)", style = MaterialTheme.typography.titleSmall)
         val lat = estado.latitud
         val lng = estado.longitud
@@ -215,7 +215,7 @@ private fun pedirUbicacion(context: Context, viewModel: OportunidadViewModel) {
     }
 }
 
-// Campo de solo lectura que abre un menú con las opciones permitidas
+// abre un menú con las opciones permitidas
 @Composable
 private fun CampoDesplegable(
     label: String,
@@ -238,7 +238,7 @@ private fun CampoDesplegable(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Capa transparente que recibe el clic para abrir el menú
+        // Capa  que recibe el clic para abrir el menú
         Box(
             Modifier
                 .matchParentSize()
