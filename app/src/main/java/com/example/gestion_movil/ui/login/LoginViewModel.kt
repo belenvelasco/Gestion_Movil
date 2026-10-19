@@ -17,7 +17,7 @@ data class LoginUiState(
 class LoginViewModel : ViewModel(){
 
     companion object{
-        const val USUARO_PRUEBA = "ejecutivo"
+        const val USUARIO_PRUEBA = "ejecutivo"
         const val  CLAVE_PRUEBA = "1234"
     }
 
@@ -34,7 +34,7 @@ class LoginViewModel : ViewModel(){
         val  claveError = when {
             s.clave.isBlank() -> "Campo obligatorio"
             usuarioError == null &&
-                    (s.usuario.trim() != USUARO_PRUEBA || s.clave !=CLAVE_PRUEBA) ->
+                    (s.usuario.trim().lowercase() != USUARIO_PRUEBA || s.clave !=CLAVE_PRUEBA) ->
                         "Usuario o clave incorrecta"
             else -> null
         }

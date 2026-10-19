@@ -1,7 +1,5 @@
 package com.example.gestion_movil.ui.navigation
 
-import android.Manifest
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -19,8 +17,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.gestion_movil.lecturaQR.CameraPermissionHelper
-import com.example.gestion_movil.ui.Qr.QrScannerScreen
-import com.example.gestion_movil.ui.Qr.QrViewModel
+import com.example.gestion_movil.ui.qr.QrScannerScreen
+import com.example.gestion_movil.ui.qr.QrViewModel
 import com.example.gestion_movil.ui.login.LoginScreen
 import com.example.gestion_movil.ui.login.LoginViewModel
 import com.example.gestion_movil.ui.menu.MenuScreen
@@ -31,9 +29,9 @@ import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
 object Rutas{
     const val  LOGIN = "login"
 
-    const val  MENU = " menu"
+    const val  MENU = "menu"
 
-    const val  LISTA = " lista"
+    const val  LISTA = "lista"
 
     const val FORM = "form/{id}"
 

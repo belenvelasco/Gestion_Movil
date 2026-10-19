@@ -1,4 +1,4 @@
-package com.example.gestion_movil.ui.Qr
+package com.example.gestion_movil.ui.qr
 
 import androidx.lifecycle.ViewModel
 import com.example.gestion_movil.data.model.QrResult

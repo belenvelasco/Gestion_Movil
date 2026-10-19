@@ -30,7 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.gestion_movil.Ubicasion.UbicacionHelper
+import com.example.gestion_movil.Ubicacion.UbicacionHelper
 import java.util.Locale
 
 // Sirve para registrar (id = 0) y para modificar (id > 0)

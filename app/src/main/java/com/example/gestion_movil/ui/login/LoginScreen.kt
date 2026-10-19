@@ -72,7 +72,7 @@ fun LoginScreen(
         }
 
         Text(
-            "Cuenta de prueba: ${LoginViewModel.USUARO_PRUEBA} / ${LoginViewModel.CLAVE_PRUEBA}",
+            "Cuenta de prueba: ${LoginViewModel.USUARIO_PRUEBA} / ${LoginViewModel.CLAVE_PRUEBA}",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

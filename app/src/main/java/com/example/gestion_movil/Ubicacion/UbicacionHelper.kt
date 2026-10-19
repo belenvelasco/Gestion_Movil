@@ -1,4 +1,4 @@
-package com.example.gestion_movil.Ubicasion
+package com.example.gestion_movil.Ubicacion
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
+import androidx.annotation.RequiresApi
 
 object UbicacionHelper {
 
@@ -80,6 +81,7 @@ object UbicacionHelper {
     }
 
     // Android 11 o superior: getCurrentLocation, probando proveedor por proveedor
+    @RequiresApi(Build.VERSION_CODES.R)
     @SuppressLint("MissingPermission")
     private fun pedirActual(
         manager: LocationManager,

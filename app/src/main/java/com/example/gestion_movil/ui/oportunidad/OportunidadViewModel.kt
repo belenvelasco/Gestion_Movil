@@ -113,6 +113,7 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
                         potencial = e.potencial,
                         estado = e.estado,
                         observaciones = e.observaciones,
+                        fechaDeteccion = e.fechaDeteccion,
                         latitud = e.latitud,
                         longitud = e.longitud
                     )
@@ -162,6 +163,7 @@ class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
                     potencial = s.potencial,
                     estado = s.estado,
                     observaciones = s.observaciones.trim(),
+                    fechaDeteccion = if (s.fechaDeteccion == 0L) System.currentTimeMillis() else s.fechaDeteccion,
                     latitud = s.latitud,
                     longitud = s.longitud
                 )

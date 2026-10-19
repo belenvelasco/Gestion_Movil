@@ -1,4 +1,4 @@
-package com.example.gestion_movil.ui.Qr
+package com.example.gestion_movil.ui.qr
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
