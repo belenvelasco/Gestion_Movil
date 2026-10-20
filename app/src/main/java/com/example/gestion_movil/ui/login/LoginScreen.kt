@@ -18,6 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import com.example.gestion_movil.R
 
 @Composable
 fun LoginScreen(
@@ -47,6 +54,7 @@ fun LoginScreen(
             value = estado.usuario,
             onValueChange = viewModel::onUsuario,
             label = { Text("Usuario")},
+            leadingIcon = { Icon(painterResource(R.drawable.ic_user), contentDescription = null) },
             singleLine = true,
             isError = estado.UsuarioError !=null,
             supportingText = { Text(estado.UsuarioError ?: "")},
@@ -57,6 +65,7 @@ fun LoginScreen(
             value =  estado.clave,
             onValueChange = viewModel:: onClave,
             label = { Text("Clave")},
+            leadingIcon = { Icon(painterResource(R.drawable.ic_password), contentDescription = null) },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             isError = estado.ClaveError != null,
@@ -68,6 +77,12 @@ fun LoginScreen(
             onClick = {viewModel.iniciarSesion()},
             modifier = Modifier.fillMaxWidth()
         ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_login),
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
             Text("Iniciar sesión")
         }
 

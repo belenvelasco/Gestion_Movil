@@ -1,5 +1,6 @@
 package com.example.gestion_movil.ui.menu
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import com.example.gestion_movil.R
 
 @Composable
 fun MenuScreen(
@@ -30,19 +38,30 @@ fun MenuScreen(
         Text("Menú principal",style = MaterialTheme.typography.headlineMedium)
 
         Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
-            Text("Ver oportunidades")
+            ContenidoBoton(R.drawable.ic_lists, "Ver oportunidades")
         }
 
         Button(onClick = onNuevaOportunidades, modifier = Modifier.fillMaxWidth()) {
-            Text("Nueva oportunidad")
+            ContenidoBoton(R.drawable.ic_add, "Nueva oportunidad")
         }
 
         Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {
-            Text("Escanerar código QR")
+            ContenidoBoton(R.drawable.ic_scan_qr, "Escanear código QR")
         }
 
         OutlinedButton(onClick = onCerrarSesion, modifier = Modifier.fillMaxWidth()) {
-            Text("Cerrar sesión")
+            ContenidoBoton(R.drawable.ic_logout, "Cerrar sesión")
         }
     }
+}
+
+@Composable
+private fun ContenidoBoton(@DrawableRes icono: Int, texto: String) {
+    Icon(
+        painter = painterResource(icono),
+        contentDescription = null,
+        modifier = Modifier.size(ButtonDefaults.IconSize)
+    )
+    Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+    Text(texto)
 }

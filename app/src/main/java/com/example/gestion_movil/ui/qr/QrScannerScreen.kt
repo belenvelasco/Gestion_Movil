@@ -29,6 +29,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.gestion_movil.data.local.OportunidadEntity
 import com.example.gestion_movil.lecturaQR.QrScanner
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.res.painterResource
+import com.example.gestion_movil.R
 
 @Composable
 fun QrScannerScreen(
@@ -51,6 +56,13 @@ fun QrScannerScreen(
         val resultado = qrResult
 
         if (!hasCameraPermission) {
+            Icon(
+                painter = painterResource(R.drawable.ic_camera),
+                contentDescription = null,
+                modifier = Modifier.size(72.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Spacer(Modifier.height(16.dp))
             Text(
                 "Permiso de cámara requerido",
                 style = MaterialTheme.typography.titleLarge,
@@ -64,6 +76,12 @@ fun QrScannerScreen(
             )
             Spacer(Modifier.height(24.dp))
             Button(onClick = onRequestPermission) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_camera),
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.width(ButtonDefaults.IconSpacing))
                 Text("Conceder permiso de cámara")
             }
         } else if (resultado == null) {
