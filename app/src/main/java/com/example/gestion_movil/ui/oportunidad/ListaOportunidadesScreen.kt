@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +45,8 @@ import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.launch
 
+
+private enum class ContenidoLista { VACIA, SIN_RESULTADOS, CON_DATOS }
 @Composable
 fun ListaOportunidadesScreen(
     viewModel: OportunidadViewModel,
@@ -59,6 +63,11 @@ fun ListaOportunidadesScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    val contenido = when {
+        todas.isEmpty() -> ContenidoLista.VACIA
+        filtradas.isEmpty() -> ContenidoLista.SIN_RESULTADOS
+        else -> ContenidoLista.CON_DATOS
+    }
 
     // Oportunidad que el usuario quiere eliminar (null = ninguna)
     var porEliminar by remember { mutableStateOf<OportunidadEntity?>(null) }
@@ -92,30 +101,36 @@ fun ListaOportunidadesScreen(
                 }
             }
 
-            if (todas.isEmpty()) {
-                Text(
-                    "Aún no hay oportunidades registradas. " +
-                            "Pulsa \"Agregar oportunidad\" para crear la primera.",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            } else if (filtradas.isEmpty()) {
-                Text(
-                    "No hay oportunidades que coincidan con la búsqueda o el filtro.",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            } else {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(bottom = 88.dp)
-                ) {
-                    items(filtradas, key = { it.id }) { oportunidad ->
-                        OportunidadItem(
-                            oportunidad = oportunidad,
-                            modifier = Modifier.animateItem(),
-                            onClick = { onEditar(oportunidad.id) },
-                            onEliminar = { porEliminar = oportunidad },
-                            onVerUbicacion = { abrirMapa(context, oportunidad) }
-                        )
+            Crossfade(
+                targetState = contenido,
+                animationSpec = tween(durationMillis = 350),
+                label = "contenidoLista",
+                modifier = Modifier.fillMaxSize()
+            ) { caso ->
+                when (caso) {
+                    ContenidoLista.VACIA -> Text(
+                        "Aún no hay oportunidades registradas. " +
+                                "Pulsa \"Agregar oportunidad\" para crear la primera.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                    ContenidoLista.SIN_RESULTADOS -> Text(
+                        "No hay oportunidades que coincidan con la búsqueda o el filtro.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                    ContenidoLista.CON_DATOS -> LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(bottom = 88.dp)
+                    ) {
+                        items(filtradas, key = { it.id }) { oportunidad ->
+                            OportunidadItem(
+                                oportunidad = oportunidad,
+                                onClick = { onEditar(oportunidad.id) },
+                                onEliminar = { porEliminar = oportunidad },
+                                onVerUbicacion = { abrirMapa(context, oportunidad) }
+                            )
+                        }
                     }
                 }
             }
