@@ -20,6 +20,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,8 +35,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.gestion_movil.Ubicacion.UbicacionHelper
+import com.example.gestion_movil.ubicacion.UbicacionHelper
 import java.util.Locale
+
+@Composable
+fun MensajeError(texto: String?) {
+    AnimatedVisibility(
+        visible = texto != null,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically()
+    ) {
+        Text(texto ?: "", color = MaterialTheme.colorScheme.error)
+    }
+}
 
 // Sirve para registrar (id) y para modificar (id )
 @Composable
@@ -83,7 +99,7 @@ fun OportunidadFormScreen(
             onValueChange = viewModel::onNombre,
             label = { Text("Nombre de la oportunidad") },
             isError = estado.nombreError != null,
-            supportingText = { Text(estado.nombreError ?: "") },
+            supportingText = { MensajeError(estado.nombreError) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -101,7 +117,7 @@ fun OportunidadFormScreen(
             label = { Text("Descripción") },
             minLines = 3,
             isError = estado.descripcionError != null,
-            supportingText = { Text(estado.descripcionError ?: "") },
+            supportingText = { MensajeError(estado.descripcionError) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -110,7 +126,7 @@ fun OportunidadFormScreen(
             onValueChange = viewModel::onFuente,
             label = { Text("Fuente de información") },
             isError = estado.fuenteError != null,
-            supportingText = { Text(estado.fuenteError ?: "") },
+            supportingText = { MensajeError(estado.fuenteError) },
             modifier = Modifier.fillMaxWidth()
         )
 

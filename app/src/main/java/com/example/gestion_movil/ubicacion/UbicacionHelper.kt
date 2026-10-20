@@ -1,4 +1,4 @@
-package com.example.gestion_movil.Ubicacion
+package com.example.gestion_movil.ubicacion
 
 import android.Manifest
 import android.annotation.SuppressLint

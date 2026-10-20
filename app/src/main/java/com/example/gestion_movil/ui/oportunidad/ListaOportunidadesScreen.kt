@@ -108,6 +108,7 @@ fun ListaOportunidadesScreen(
                     items(filtradas, key = { it.id }) { oportunidad ->
                         OportunidadItem(
                             oportunidad = oportunidad,
+                            modifier = Modifier.animateItem(),
                             onClick = { onEditar(oportunidad.id) },
                             onEliminar = { porEliminar = oportunidad },
                             onVerUbicacion = { abrirMapa(context, oportunidad) }
@@ -180,6 +181,7 @@ private fun abrirMapa(context: android.content.Context, oportunidad: Oportunidad
 @Composable
 private fun OportunidadItem(
     oportunidad: OportunidadEntity,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onEliminar: () -> Unit,
     onVerUbicacion: () -> Unit
@@ -189,7 +191,7 @@ private fun OportunidadItem(
     val tieneUbicacion = oportunidad.latitud != null && oportunidad.longitud != null
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
     ) {

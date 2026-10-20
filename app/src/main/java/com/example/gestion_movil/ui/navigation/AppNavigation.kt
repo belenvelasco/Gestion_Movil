@@ -10,6 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -61,8 +63,20 @@ fun AppNavigation(){
 
     NavHost(
         navController = navController,
-        startDestination = Rutas.LOGIN
-    ){
+        startDestination = Rutas.LOGIN,
+        enterTransition = {
+            slideInHorizontally(tween(300)) { it } + fadeIn(tween(300))
+        },
+        exitTransition = {
+            slideOutHorizontally(tween(300)) { -it / 3 } + fadeOut(tween(300))
+        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it / 3 } + fadeIn(tween(300))
+        },
+        popExitTransition = {
+            slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300))
+        }
+    ) {
         composable(Rutas.LOGIN){
             LoginScreen(
                 viewModel = loginViewModel,

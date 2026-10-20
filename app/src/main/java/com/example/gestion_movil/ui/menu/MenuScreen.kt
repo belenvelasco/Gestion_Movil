@@ -27,7 +27,7 @@ fun MenuScreen(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.CenterVertically)
     ) {
-        Text("Menu principal",style = MaterialTheme.typography.headlineMedium)
+        Text("Menú principal",style = MaterialTheme.typography.headlineMedium)
 
         Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
             Text("Ver oportunidades")
@@ -38,11 +38,11 @@ fun MenuScreen(
         }
 
         Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {
-            Text("Escanerar codigo Qr")
+            Text("Escanerar código QR")
         }
 
         OutlinedButton(onClick = onCerrarSesion, modifier = Modifier.fillMaxWidth()) {
-            Text("Cerrar sesion")
+            Text("Cerrar sesión")
         }
     }
 }
