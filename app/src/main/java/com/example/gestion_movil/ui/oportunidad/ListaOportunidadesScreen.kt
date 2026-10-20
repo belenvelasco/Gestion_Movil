@@ -3,6 +3,7 @@ package com.example.gestion_movil.ui.oportunidad
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +58,7 @@ fun ListaOportunidadesScreen(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
 
     // Oportunidad que el usuario quiere eliminar (null = ninguna)
     var porEliminar by remember { mutableStateOf<OportunidadEntity?>(null) }
@@ -190,7 +193,15 @@ private fun OportunidadItem(
         .format(Date(oportunidad.fechaDeteccion))
     val tieneUbicacion = oportunidad.latitud != null && oportunidad.longitud != null
 
+    val color by animateColorAsState(
+        if (oportunidad.prioridad == "Alta") MaterialTheme.colorScheme.primaryContainer
+        else if (oportunidad.prioridad == "Media") MaterialTheme.colorScheme.secondaryContainer
+        else MaterialTheme.colorScheme.surfaceVariant,
+        label = "colorTarjeta"
+    )
+
     Card(
+        colors = CardDefaults.cardColors(containerColor = color),
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
