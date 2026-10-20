@@ -12,12 +12,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -129,6 +133,11 @@ fun ListaOportunidadesScreen(
                         items(filtradas, key = { it.id }) { oportunidad ->
                             OportunidadItem(
                                 oportunidad = oportunidad,
+                                modifier = Modifier.animateItem(
+                                    fadeInSpec = tween(300),
+                                    fadeOutSpec = tween(300),
+                                    placementSpec = tween(300)
+                                ),
                                 onClick = { onEditar(oportunidad.id) },
                                 onEliminar = { porEliminar = oportunidad },
                                 onVerUbicacion = { abrirMapa(context, oportunidad) }
@@ -234,9 +243,24 @@ private fun OportunidadItem(
             )
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 if (tieneUbicacion) {
-                    TextButton(onClick = onVerUbicacion) { Text("Ver ubicación") }
+                    TextButton(onClick = onVerUbicacion) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_location_on),
+                            contentDescription = null,
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Text("Ver ubicación") }
                 }
-                TextButton(onClick = onEliminar) { Text("Eliminar") }
+
+                TextButton(onClick = onEliminar) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_delete),
+                        contentDescription = null,
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                    Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+                    Text("Eliminar")
+                }
             }
         }
     }
