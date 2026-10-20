@@ -28,7 +28,10 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.Composable
+import com.example.gestion_movil.R
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -145,12 +148,10 @@ fun ListaOportunidadesScreen(
 
         ExtendedFloatingActionButton(
             onClick = onNueva,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Text("Agregar oportunidad")
-        }
+            icon = { Icon(painterResource(R.drawable.ic_add), contentDescription = null) },
+            text = { Text("Agregar oportunidad") },
+            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)
+        )
     }
 
     // Confirmación antes de borrar

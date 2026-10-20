@@ -25,7 +25,15 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.annotation.DrawableRes
+import com.example.gestion_movil.R
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -98,8 +106,10 @@ fun OportunidadFormScreen(
             value = estado.nombre,
             onValueChange = viewModel::onNombre,
             label = { Text("Nombre de la oportunidad") },
+            leadingIcon = { Icon(painterResource(R.drawable.ic_business), contentDescription = null) },
+            trailingIcon = iconoError(estado.nombreError != null),
             isError = estado.nombreError != null,
-            supportingText = { MensajeError(estado.nombreError) },
+            supportingText = { Text(estado.nombreError ?: "") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -108,6 +118,7 @@ fun OportunidadFormScreen(
             valor = estado.tipo,
             opciones = viewModel.tipos,
             error = estado.tipoError,
+            icono = R.drawable.ic_list,
             onSeleccion = viewModel::onTipo
         )
 
@@ -115,6 +126,8 @@ fun OportunidadFormScreen(
             value = estado.descripcion,
             onValueChange = viewModel::onDescripcion,
             label = { Text("Descripción") },
+            leadingIcon = { Icon(painterResource(R.drawable.ic_description), null) },
+            trailingIcon = iconoError(estado.descripcionError != null),
             minLines = 3,
             isError = estado.descripcionError != null,
             supportingText = { MensajeError(estado.descripcionError) },
@@ -125,6 +138,8 @@ fun OportunidadFormScreen(
             value = estado.fuente,
             onValueChange = viewModel::onFuente,
             label = { Text("Fuente de información") },
+            leadingIcon = { Icon(painterResource(R.drawable.ic_search), null) },
+            trailingIcon = iconoError(estado.fuenteError != null),
             isError = estado.fuenteError != null,
             supportingText = { MensajeError(estado.fuenteError) },
             modifier = Modifier.fillMaxWidth()
@@ -135,6 +150,7 @@ fun OportunidadFormScreen(
             valor = estado.prioridad,
             opciones = viewModel.prioridades,
             error = estado.prioridadError,
+            icono = R.drawable.ic_flag,
             onSeleccion = viewModel::onPrioridad
         )
 
@@ -143,6 +159,7 @@ fun OportunidadFormScreen(
             valor = estado.potencial,
             opciones = viewModel.potenciales,
             error = estado.potencialError,
+            icono = R.drawable.ic_trending_up,
             onSeleccion = viewModel::onPotencial
         )
 
@@ -151,6 +168,7 @@ fun OportunidadFormScreen(
             valor = estado.estado,
             opciones = viewModel.estados,
             error = estado.estadoError,
+            icono = R.drawable.ic_check_circle,
             onSeleccion = viewModel::onEstado
         )
 
@@ -158,6 +176,7 @@ fun OportunidadFormScreen(
             value = estado.observaciones,
             onValueChange = viewModel::onObservaciones,
             label = { Text("Observaciones (opcional)") },
+            leadingIcon = { Icon(painterResource(R.drawable.ic_edit), null) },
             minLines = 3,
             modifier = Modifier.fillMaxWidth()
         )
@@ -192,10 +211,21 @@ fun OportunidadFormScreen(
             enabled = !estado.ubicando,
             modifier = Modifier.fillMaxWidth()
         ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_location_on),
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
             Text(if (estado.ubicando) "Obteniendo ubicación..." else "Obtener ubicación actual")
         }
         if (lat != null && lng != null) {
             TextButton(onClick = { viewModel.quitarUbicacion() }) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_close),
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
                 Text("Quitar ubicación")
             }
         }
@@ -205,6 +235,12 @@ fun OportunidadFormScreen(
             enabled = !estado.guardando,
             modifier = Modifier.fillMaxWidth()
         ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_check),
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
             Text(if (estado.guardando) "Guardando..." else "Guardar")
         }
 
@@ -212,6 +248,12 @@ fun OportunidadFormScreen(
             onClick = onVolver,
             modifier = Modifier.fillMaxWidth()
         ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_close),
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
             Text("Cancelar")
         }
     }
@@ -238,6 +280,7 @@ private fun CampoDesplegable(
     valor: String,
     opciones: List<String>,
     error: String?,
+    @DrawableRes icono: Int,
     onSeleccion: (String) -> Unit
 ) {
     var expandido by remember { mutableStateOf(false) }
@@ -248,7 +291,17 @@ private fun CampoDesplegable(
             onValueChange = {},
             readOnly = true,
             label = { Text(label) },
-            trailingIcon = { Text("▼") },
+            leadingIcon = { Icon(painterResource(icono), contentDescription = null) },
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(
+                        if (error != null) R.drawable.ic_warning else R.drawable.ic_arrow_drop_down
+                    ),
+                    contentDescription = null,
+                    tint = if (error != null) MaterialTheme.colorScheme.error
+                    else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
             isError = error != null,
             supportingText = { Text(error ?: "") },
             modifier = Modifier.fillMaxWidth()
@@ -277,3 +330,14 @@ private fun CampoDesplegable(
         }
     }
 }
+
+private fun iconoError(hayError: Boolean): (@Composable () -> Unit)? =
+    if (hayError) {
+        {
+            Icon(
+                painter = painterResource(R.drawable.ic_warning),
+                contentDescription = "Campo con error",
+                tint = MaterialTheme.colorScheme.error
+            )
+        }
+    } else null
