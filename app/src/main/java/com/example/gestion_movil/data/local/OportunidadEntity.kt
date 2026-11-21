@@ -28,3 +28,4 @@ data class OportunidadEntity(
     val fechaDeteccion: Long = System.currentTimeMillis(),
     val fechaActualizacion: Long = System.currentTimeMillis()
 )
+

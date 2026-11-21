@@ -77,6 +77,8 @@ class EventosExternosViewModel (
 
     //
 
+
+
     fun importar(evento: EventosExterno){
         viewModelScope.launch {
             val organizationId = oportunidadRepository.obtenerOcrearOrganizacion(evento.organizacion)

@@ -27,3 +27,4 @@ data class HistoriaEntity(
     val descripcion: String,
     val fecha: Long = System.currentTimeMillis()
 )
+

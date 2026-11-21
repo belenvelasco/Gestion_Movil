@@ -6,6 +6,7 @@ import com.example.gestion_movil.data.local.SeguimientoEntity
 import kotlinx.coroutines.flow.Flow
 
 
+//
 class GestionRepository(
     private val contactoDao: ContactoDao,
     private val seguimientoDao: SeguimientoDao

@@ -25,3 +25,4 @@ interface OportunidadDao {
     @Delete
     suspend fun eliminar(oportunidad: OportunidadEntity)
 }
+

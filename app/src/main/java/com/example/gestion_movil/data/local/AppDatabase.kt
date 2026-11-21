@@ -21,6 +21,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 )
 abstract class AppDatabase : RoomDatabase() {
 
+
+
     abstract fun oportunidadDao(): OportunidadDao
     abstract fun organizacionDao(): OrganizacionDao
     abstract fun contactoDao():ContactoDao

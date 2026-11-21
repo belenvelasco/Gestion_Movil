@@ -8,3 +8,4 @@ data class EventoExterno(
     val comuna: String,
     val organizacion: String
 )
+

@@ -18,6 +18,7 @@ interface OrganizacionDao{
     @Query("SELECT * FROM organizaciones WHERE nombre = :nombre COLLATE NOCASE LIMIT 1")
     suspend fun buscarPorNombre(nombre: String): OrganizacionEntity?
 
+
     @Insert
     suspend fun insertar(organizacion: OrganizacionEntity): Long
 }

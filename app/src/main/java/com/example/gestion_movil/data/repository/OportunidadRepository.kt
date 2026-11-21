@@ -36,6 +36,7 @@ class OportunidadRepository(
 
     }
 
+
     //
     suspend fun guardar(oportunidad: OportunidadEntity): Long {
         val ahora = System.currentTimeMillis()

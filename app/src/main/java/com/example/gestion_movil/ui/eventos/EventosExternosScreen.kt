@@ -62,6 +62,8 @@ fun EventosExternosScreen(viewModel: EventosExternosViewModel) {
             }
         }
     }
+
+
 }
 
 @Composable
