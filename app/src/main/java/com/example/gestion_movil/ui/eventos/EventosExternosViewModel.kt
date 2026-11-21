@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestion_movil.data.local.OportunidadEntity
+import com.example.gestion_movil.data.model.EventoExterno
+import com.example.gestion_movil.data.repository.EventoRepository
 import com.example.gestion_movil.data.repository.OportunidadRepository
 import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
 import kotlinx.coroutines.CancellationException
@@ -16,7 +18,7 @@ import kotlinx.coroutines.launch
 //
 data class EventosUiState(
     val cargando: Boolean= false,
-    val eventos: List<EventoExternos> = emptyList (),
+    val eventos: List<EventoExterno> = emptyList (),
     val error: String? = null,
     //
     val importados: Set<Int> = emptySet()
@@ -34,7 +36,7 @@ class EventosExternosViewModel (
     constructor(app: Application) : this(
         app,
         EventoRepository(),
-        OportunidadViewModel.crearRepository(app)
+        OportunidadViewModel.crearRepositorio(app)
     )
 
     private  val _uiState = MutableStateFlow(EventosUiState())
@@ -79,9 +81,9 @@ class EventosExternosViewModel (
 
 
 
-    fun importar(evento: EventosExterno){
+    fun importar(evento: EventoExterno){
         viewModelScope.launch {
-            val organizationId = oportunidadRepository.obtenerOcrearOrganizacion(evento.organizacion)
+            val organizationId = oportunidadRepository.obtenerOCrearOrganizacion(evento.organizacion)
             oportunidadRepository.guardar(
                 OportunidadEntity(
                     nombre = evento.nombre,

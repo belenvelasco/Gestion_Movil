@@ -13,9 +13,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import com.example.gestion_movil.data.model.EventoExterno
 import com.example.gestion_movil.util.Fechas
 
 
@@ -32,7 +34,7 @@ fun EventosExternosScreen(viewModel: EventosExternosViewModel) {
         Text("Catalogo de evento externos", Stayle = MaterialTheme.typography.headlineSmall)
         Text(
             "Datos de prueba"
-            style = MaterialTheme.typography.bodySmall,
+            stayle = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         when {
@@ -47,15 +49,15 @@ fun EventosExternosScreen(viewModel: EventosExternosViewModel) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.error
                 )
-                Button(onClick = { ViewModel.cargar()}) {Text("reintentar") }
+                Button(onClick = { viewModel.cargar() }) { Text("Reintentar") }
             }
-            else ->{
+            else -> {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    item(estado.eventos, key = {it.id }) {evento ->
+                    items(estado.eventos, key = { it.id }) { evento ->
                         TarjetaEvento(
                             evento = evento,
                             importado = evento.id in estado.importados,
-                            onImportar ={ ViewModel.importar(evento)}
+                            onImportar = { viewModel.importar(evento) }
                         )
                     }
                 }
@@ -78,10 +80,10 @@ private fun TarjetaEvento(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(evento.nombre, style = MaterialTheme.typography.titleMedium)
-            Text("Organizacion: ${evento.organizacio}", style = MaterialTheme.typography.bodyMedium)
+            Text("Organizacion: ${evento.organizacion}", style = MaterialTheme.typography.bodyMedium)
             Text("comuna: ${evento.comuna}", style = MaterialTheme.typography.bodyMedium)
             Text(
-                "Fecha(ejemplo): ${Fechas.formatearEvento(evento.fechas)}",
+                "Fecha(ejemplo): ${Fechas.formatearEvento(evento.fecha)}",
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(

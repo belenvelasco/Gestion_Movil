@@ -53,23 +53,21 @@ fun LoginScreen(
         OutlinedTextField(
             value = estado.usuario,
             onValueChange = viewModel::onUsuario,
-            label = { Text("Usuario")},
-            leadingIcon = { Icon(painterResource(R.drawable.ic_user), contentDescription = null) },
+            label = { Text("Usuario") },
             singleLine = true,
-            isError = estado.UsuarioError !=null,
-            supportingText = { Text(estado.UsuarioError ?: "")},
+            isError = estado.usuarioError != null,
+            supportingText = { Text(estado.usuarioError ?: "") },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
-            value =  estado.clave,
-            onValueChange = viewModel:: onClave,
-            label = { Text("Clave")},
-            leadingIcon = { Icon(painterResource(R.drawable.ic_password), contentDescription = null) },
+            value = estado.clave,
+            onValueChange = viewModel::onClave,
+            label = { Text("Clave") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            isError = estado.ClaveError != null,
-            supportingText = { Text(estado.ClaveError?: "")},
+            isError = estado.claveError != null,
+            supportingText = { Text(estado.claveError ?: "") },
             modifier = Modifier.fillMaxWidth()
         )
 
