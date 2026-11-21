@@ -14,7 +14,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         OrganizacionEntity::class,
         ContactoEntity::class,
         SeguimientoEntity::class,
-        HistorialEntity::class
+        HistoriaEntity::class
                ],
     version = 3,
     exportSchema = false
@@ -24,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 
     abstract fun oportunidadDao(): OportunidadDao
-    abstract fun organizacionDao(): OrganizacionDao
+    abstract fun organizacionDao (): OrganizacionDao
     abstract fun contactoDao():ContactoDao
     abstract fun seguimientoDao():SeguimientoDao
     abstract fun historiaDao(): HistoriaDao

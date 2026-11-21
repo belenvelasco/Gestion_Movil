@@ -2,6 +2,7 @@ package com.example.gestion_movil.data.repository
 
 import com.example.gestion_movil.data.local.ContactoDao
 import com.example.gestion_movil.data.local.ContactoEntity
+import com.example.gestion_movil.data.local.SeguimientoDao
 import com.example.gestion_movil.data.local.SeguimientoEntity
 import kotlinx.coroutines.flow.Flow
 
