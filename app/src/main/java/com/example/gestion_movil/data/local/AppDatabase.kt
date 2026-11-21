@@ -1,16 +1,31 @@
 package com.example.gestion_movil.data.local
 
 import android.content.Context
+import android.provider.ContactsContract
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [OportunidadEntity::class], version = 2, exportSchema = false)
+@Database(
+    entities = [
+        OportunidadEntity::class,
+        OrganizacionEntity::class,
+        ContactoEntity::class,
+        SeguimientoEntity::class,
+        HistorialEntity::class
+               ],
+    version = 3,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun oportunidadDao(): OportunidadDao
+    abstract fun organizacionDao(): OrganizacionDao
+    abstract fun contactoDao():ContactoDao
+    abstract fun seguimientoDao():SeguimientoDao
+    abstract fun historiaDao(): HistoriaDao
 
     companion object {
         //longitud y longitud Ubicacion
@@ -24,6 +39,10 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
+        //
+        //
+
+        @Suppress("DEPRECATION")
         fun getInstance(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
@@ -31,6 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "oportunidad.db"
                 ).addMigrations(MIGRACION_1_2)
+                    .fallbackToDestructiveMigration()
                     .build().also { INSTANCE = it }
             }
     }

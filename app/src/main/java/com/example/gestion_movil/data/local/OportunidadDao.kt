@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,9 +14,12 @@ interface OportunidadDao {
     fun observarTodas(): Flow<List<OportunidadEntity>>
 
     @Query("SELECT * FROM oportunidades WHERE id = :id")
-    suspend fun obtenerPorId(id: Int): OportunidadEntity?
+    fun observarPorId(id: Int): OportunidadEntity?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT * FROM oportunidades WHERE id = :id")
+    fun obtenerPorId(id: Int): OportunidadEntity?
+
+    @Upsert
     suspend fun guardar(oportunidad: OportunidadEntity): Long
 
     @Delete

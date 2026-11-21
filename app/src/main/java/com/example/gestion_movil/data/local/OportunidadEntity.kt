@@ -1,5 +1,6 @@
 package com.example.gestion_movil.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -14,6 +15,14 @@ data class OportunidadEntity(
     val potencial: String,
     val estado: String,
     val observaciones: String,
+    //
+    val fechaEvento: Long? = null,
+    @ColumnInfo(defaultValue = "''")
+    val comuna: String= "",
+    //
+    val publicoEsperado: Int? = null,
+    //
+    val organizacionId: Int? = null,
     val latitud: Double? = null,
     val longitud: Double? = null,
     val fechaDeteccion: Long = System.currentTimeMillis(),
