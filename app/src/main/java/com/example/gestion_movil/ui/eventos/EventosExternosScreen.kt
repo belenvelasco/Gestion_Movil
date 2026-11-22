@@ -34,7 +34,7 @@ fun EventosExternosScreen(viewModel: EventosExternosViewModel) {
         Text("Catalogo de evento externos", Stayle = MaterialTheme.typography.headlineSmall)
         Text(
             "Datos de prueba"
-            stayle = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         when {

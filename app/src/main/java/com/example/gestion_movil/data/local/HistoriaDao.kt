@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 
 interface HistoriaDao {
-    @Query("SELECT * FROM histria_cambios WHERE oportunidad = :oportunidadId ORDER BY fecha DESC, id DESC")
+    @Query("SELECT * FROM historia_cambios WHERE oportunidad = :oportunidadId ORDER BY fecha DESC, id DESC")
     fun observarPorOportunidad(oportunidadId: Int): Flow<List<HistoriaEntity>>
 
     @Insert

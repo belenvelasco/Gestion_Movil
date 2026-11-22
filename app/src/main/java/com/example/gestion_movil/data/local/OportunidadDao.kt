@@ -14,10 +14,10 @@ interface OportunidadDao {
     fun observarTodas(): Flow<List<OportunidadEntity>>
 
     @Query("SELECT * FROM oportunidades WHERE id = :id")
-    fun observarPorId(id: Int): OportunidadEntity?
+    fun observarPorId(id: Int): Flow<OportunidadEntity?>
 
     @Query("SELECT * FROM oportunidades WHERE id = :id")
-    fun obtenerPorId(id: Int): OportunidadEntity?
+    suspend fun obtenerPorId(id: Int): OportunidadEntity?
 
     @Upsert
     suspend fun guardar(oportunidad: OportunidadEntity): Long

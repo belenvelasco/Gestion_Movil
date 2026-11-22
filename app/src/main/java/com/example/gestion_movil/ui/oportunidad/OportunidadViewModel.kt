@@ -17,10 +17,14 @@ import kotlinx.coroutines.launch
 
 class OportunidadViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val repository = OportunidadRepository(
-        AppDatabase.getInstance(app).oportunidadDao()
-    )
+    companion object {
+        fun crearRepositorio(app: Application): OportunidadRepository {
+            val db = AppDatabase.getInstance(app)
+            return OportunidadRepository(db.oportunidadDao(), db.organizacionDao(), db.historiaDao())
+        }
+    }
 
+    private val repository = crearRepositorio(app)
     val tipos = listOf(
         "Evento corporativo", "Feria empresarial", "Actividad municipal",
         "Jornada de beneficios", "Feria institucional", "Activación comercial", "Otra"

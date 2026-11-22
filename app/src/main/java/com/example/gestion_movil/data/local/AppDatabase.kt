@@ -1,7 +1,6 @@
 package com.example.gestion_movil.data.local
 
 import android.content.Context
-import android.provider.ContactsContract
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -14,9 +13,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         OrganizacionEntity::class,
         ContactoEntity::class,
         SeguimientoEntity::class,
-        HistoriaEntity::class
+        HistoriaEntity::class,
+        EvidenciaEntity::class
                ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -28,6 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun contactoDao():ContactoDao
     abstract fun seguimientoDao():SeguimientoDao
     abstract fun historiaDao(): HistoriaDao
+    abstract fun evidenciaDao(): EvidenciaDao
 
     companion object {
         //longitud y longitud Ubicacion

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestion_movil.data.local.AppDatabase
 import com.example.gestion_movil.data.local.ContactoEntity
+import com.example.gestion_movil.data.local.HistoriaEntity
 import com.example.gestion_movil.data.local.HistorialEntity
 import com.example.gestion_movil.data.local.OportunidadEntity
 import com.example.gestion_movil.data.local.SeguimientoEntity
@@ -68,7 +69,7 @@ class DetalleOportunidadViewModel(
         .flatMapLatest { gestionRepository.seguimientos(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val historial: StateFlow<List<HistorialEntity>> = idActual
+    val historial: StateFlow<List<HistoriaEntity>> = idActual
         .flatMapLatest { oportunidadRepository.historial(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 

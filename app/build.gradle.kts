@@ -62,10 +62,14 @@ dependencies {
     implementation("androidx.camera:camera-camera2:$camerax_version")
     implementation("androidx.camera:camera-lifecycle:$camerax_version")
     implementation("androidx.camera:camera-view:$camerax_version")
+    implementation("androidx.camera:camera-video:${camerax_version}")
 
     // ML Kit: lectura de códigos QR
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
 
+    // Retrofit y Gson Converter
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

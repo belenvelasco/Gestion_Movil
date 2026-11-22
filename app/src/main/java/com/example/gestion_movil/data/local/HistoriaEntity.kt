@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.descriptors.SerialDescriptor
 
 @Entity(
-    tableName = "histria_cambios",
+    tableName = "historia_cambios",
     foreignKeys = [
         ForeignKey(
             entity = OportunidadEntity::class,

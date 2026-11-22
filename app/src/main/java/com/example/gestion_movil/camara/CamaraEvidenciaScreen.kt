@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.gestion_movil.data.local.EvidenciaEntity
+import com.example.gestion_movil.ui.evidencias.EvidenciaViewModel
 
 @SuppressLint("MissingPermission")
 @Composable

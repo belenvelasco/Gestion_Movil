@@ -27,6 +27,7 @@ import com.example.gestion_movil.ui.qr.QrScannerScreen
 import com.example.gestion_movil.ui.qr.QrViewModel
 import com.example.gestion_movil.ui.login.LoginScreen
 import com.example.gestion_movil.ui.login.LoginViewModel
+import com.example.gestion_movil.ui.login.Rol
 import com.example.gestion_movil.ui.menu.MenuScreen
 import com.example.gestion_movil.ui.oportunidad.DetalleOportunidadScreen
 import com.example.gestion_movil.ui.oportunidad.DetalleOportunidadViewModel
@@ -171,7 +172,7 @@ fun AppNavigation(){
             )
         }
 
-        composable(Rutas.QR) {
+        composable(Rutas.Qr) {
             // Mantiene la lista suscrita para poder buscar por código
             oportunidadViewModel.lista.collectAsState()
             LaunchedEffect(Unit) { qrViewModel.clearResult() }
@@ -189,5 +190,3 @@ fun AppNavigation(){
     }
 }
 
-    }
-}

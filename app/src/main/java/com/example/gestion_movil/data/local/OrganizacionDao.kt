@@ -1,6 +1,5 @@
 package com.example.gestion_movil.data.local
 
-import android.provider.ContactsContract
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -9,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface OrganizacionDao{
 
-    @Query("SELECT * FROM Organizaciones ORDER BY nombre")
+    @Query("SELECT * FROM organizaciones ORDER BY nombre")
     fun observarTodas(): Flow<List<OrganizacionEntity>>
 
     @Query("SELECT * FROM organizaciones WHERE id= :id")

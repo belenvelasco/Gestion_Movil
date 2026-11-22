@@ -1,6 +1,7 @@
 package com.example.gestion_movil.data.remote
 
-import androidx.room.Query
+import retrofit2.http.Query
+import retrofit2.http.GET
 
 
 interface ApiService{

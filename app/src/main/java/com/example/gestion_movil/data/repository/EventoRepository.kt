@@ -29,7 +29,7 @@ class EventoRepository(
                 descripcion = (post.body ?: "").replace("\n", " ").trim(),
                 fecha = fechaDeEjemplo(hoy, post.id),
                 comuna = usuario?.address?.city ?: "Sin comuna",
-                organizacion = usuario?.comany?.name ?: "Sin organización"
+                organizacion = usuario?.company?.name ?: "Sin organización"
             )
         }
     }

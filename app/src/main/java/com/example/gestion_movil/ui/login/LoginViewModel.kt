@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 
-class  Rol {EJECUTIVO, SUPERVISOR}
+enum class  Rol {EJECUTIVO, SUPERVISOR}
 data class LoginUiState(
     val usuario: String = "",
     val clave: String = "",

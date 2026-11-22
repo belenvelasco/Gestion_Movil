@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestion_movil.data.local.AppDatabase
 import com.example.gestion_movil.data.local.EvidenciaEntity
+import com.example.gestion_movil.data.repository.EvidenciaRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -48,7 +49,7 @@ class EvidenciaViewModel(
     companion object {
         fun crearRepositorio(app: Application): EvidenciaRepository {
             val db = AppDatabase.getInstance(app)
-            return EvidenciaRepository(db.evidenciaDao(), db.historialDao())
+            return EvidenciaRepository(db.evidenciaDao(), db.historiaDao())
         }
     }
 }

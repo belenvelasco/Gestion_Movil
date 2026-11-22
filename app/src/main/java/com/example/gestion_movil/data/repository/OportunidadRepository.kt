@@ -19,12 +19,10 @@ class OportunidadRepository(
 
     val organizaciones: Flow<List<OrganizacionEntity>> = organizacionDao.observarTodas()
 
-    val observarPorId(id: Int): Flow<OportunidadesEntity?> = dao.observarPorId(id)
-
     fun historial (oportunidadId: Int): Flow<List<HistoriaEntity >> =
         historiaDao .observarPorOportunidad(oportunidadId)
 
-    suspend fun observarPorId(id: Int): OportunidadEntity ?= dao.observarPorId(id)
+    fun observarPorId(id: Int): OportunidadEntity ?= dao.observarPorId(id)
 
     suspend fun obtenerOrganizacion(id: Int): OrganizacionEntity? = organizacionDao.obtenerPorId(id)
 

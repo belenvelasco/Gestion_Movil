@@ -11,8 +11,8 @@ data class UserDto(
     val id: Int,
     val name: String?,
     val address: AddressDto?,
-    val comany: ComanyDto?
+    val company: CompanyDto?
 )
 
 data class AddressDto(val city: String)
-data class ComanyDto(val name: String)
+data class CompanyDto(val name: String)
