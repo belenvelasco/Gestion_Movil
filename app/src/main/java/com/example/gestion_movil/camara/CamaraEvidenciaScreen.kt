@@ -44,7 +44,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.gestion_movil.data.local.EvidenciaEntity
 import com.example.gestion_movil.ui.evidencias.EvidenciaViewModel
-
+import com.example.gestion_movil.util.ArchivosEvidencia
+import androidx.camera.video.AudioConfig
 @SuppressLint("MissingPermission")
 @Composable
 fun CamaraEvidenciaScreen(
@@ -153,7 +154,7 @@ fun CamaraEvidenciaScreen(
         val opciones = FileOutputOptions.Builder(archivo).build()
         grabacion = controlador.startRecording(
             opciones,
-            androidx.camera.video.AudioConfig.create(conAudio),
+            AudioConfig.create(conAudio),
             ejecutor
         ) { evento ->
             if (evento is VideoRecordEvent.Finalize) {
