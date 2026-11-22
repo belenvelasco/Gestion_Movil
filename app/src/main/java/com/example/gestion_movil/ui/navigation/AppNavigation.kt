@@ -65,10 +65,12 @@ fun AppNavigation(){
     val navController = rememberNavController()
     val context = LocalContext.current
 
+    //
     val loginViewModel: LoginViewModel = viewModel()
     val oportunidadViewModel: OportunidadViewModel = viewModel()
     val qrViewModel : QrViewModel = viewModel()
 
+    //
     var hasCameraPermission by remember {
         mutableStateOf(CameraPermissionHelper.hasCameraPermission(context))
     }

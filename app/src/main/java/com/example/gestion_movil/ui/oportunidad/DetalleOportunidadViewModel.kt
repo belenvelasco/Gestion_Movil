@@ -76,7 +76,7 @@ class DetalleOportunidadViewModel(
     private val _uiState = MutableStateFlow(DetalleUiState())
     val uiState: StateFlow<DetalleUiState> = _uiState.asStateFlow()
 
-    // ---------------- Contactos ----------------
+    // Contactos
 
     fun abrirFormContacto() = _uiState.update {
         it.copy(
@@ -141,7 +141,7 @@ class DetalleOportunidadViewModel(
         viewModelScope.launch { gestionRepository.eliminarContacto(contacto) }
     }
 
-    // ---------------- Gestiones y propuestas ----------------
+    // Gestiones y propuestas
 
     fun abrirFormGestion() = _uiState.update {
         it.copy(

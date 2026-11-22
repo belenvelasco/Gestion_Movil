@@ -1,5 +1,8 @@
 package com.example.gestion_movil.data.remote
 
+//
+//
+//
 data class PostDto(
     val userId: Int,
     val id: Int,
@@ -7,6 +10,7 @@ data class PostDto(
     val body: String?
 )
 
+//
 data class UserDto(
     val id: Int,
     val name: String?,

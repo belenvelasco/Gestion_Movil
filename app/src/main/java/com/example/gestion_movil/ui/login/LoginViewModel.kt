@@ -39,16 +39,11 @@ class LoginViewModel : ViewModel(){
     fun iniciarSesion(){
         val s = _uistate.value
         val usuarioError = if (s.usuario.isBlank()) "Campo obligatorio" else null
-        val usuario = s.usuario.trim()
-        val  rol = when {
-            usuario == USUARIO_PRUEBA && s.clave == CLAVE_PRUEBA -> Rol.EJECUTIVO
-            usuario == USUARIO_SUPERVISOR && s.clave == CLAVE_SUPERVISOR -> Rol.SUPERVISOR
-            else -> null
-        }
-
         val claveError = when{
-            s.clave.isBlank() -> "campo obligatorio"
-            usuarioError == null && rol == null -> "usuario o cleve incorrecta"
+            s.clave.isBlank() -> "Campo obligatorio"
+            usuarioError == null &&
+                    (s.usuario.trim() != USUARIO_PRUEBA || s.clave != CLAVE_PRUEBA) ->
+                        "Usuario o clave incorrectos"
             else -> null
         }
         _uistate.update {
@@ -56,7 +51,6 @@ class LoginViewModel : ViewModel(){
                 UsuarioError = usuarioError,
                 ClaveError = claveError,
                 loginExitoso = usuarioError == null && claveError == null,
-                rol = rol ?: it.rol
             )
         }
     }

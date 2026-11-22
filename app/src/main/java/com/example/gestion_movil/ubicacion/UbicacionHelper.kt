@@ -14,6 +14,9 @@ import android.os.Looper
 import androidx.core.content.ContextCompat
 import androidx.annotation.RequiresApi
 
+
+//
+//
 object UbicacionHelper {
 
     val PERMISOS = arrayOf(
@@ -34,7 +37,9 @@ object UbicacionHelper {
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
+
     // Entrega la ubicación actual o no se pudo obtener.
+    //
     @SuppressLint("MissingPermission")
     @Suppress("DEPRECATION")
     fun obtenerUbicacion(context: Context, onResultado: (Location?) -> Unit) {
