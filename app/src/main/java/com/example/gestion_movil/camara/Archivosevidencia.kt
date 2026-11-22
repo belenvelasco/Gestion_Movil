@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.gestion_movil.data.local.EvidenciaEntity
 import java.io.File
 
+
 object ArchivosEvidencia {
     fun crear(context: Context, oportunidadId: Int, tipo: String): File {
         val base = context.getExternalFilesDir(null) ?: context.filesDir
