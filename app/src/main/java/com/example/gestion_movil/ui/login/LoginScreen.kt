@@ -44,7 +44,7 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(12.dp, alignment =  androidx.compose.ui.Alignment.CenterVertically)
 
     ) {
         Text("Gestión de oportunidades", style = MaterialTheme.typography.headlineMedium )
@@ -55,8 +55,8 @@ fun LoginScreen(
             onValueChange = viewModel::onUsuario,
             label = { Text("Usuario") },
             singleLine = true,
-            isError = estado.usuarioError != null,
-            supportingText = { Text(estado.usuarioError ?: "") },
+            isError = estado.UsuarioError != null,
+            supportingText = { Text(estado.UsuarioError ?: "") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -66,8 +66,8 @@ fun LoginScreen(
             label = { Text("Clave") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            isError = estado.claveError != null,
-            supportingText = { Text(estado.claveError ?: "") },
+            isError = estado.ClaveError != null,
+            supportingText = { Text(estado.ClaveError ?: "") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -75,17 +75,12 @@ fun LoginScreen(
             onClick = {viewModel.iniciarSesion()},
             modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_login),
-                contentDescription = null,
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
             Text("Iniciar sesión")
         }
 
         Text(
-            "Cuenta de prueba: ${LoginViewModel.USUARIO_PRUEBA} / ${LoginViewModel.CLAVE_PRUEBA}",
+            "Cuenta de prueba: ${LoginViewModel.USUARIO_PRUEBA} / ${LoginViewModel.CLAVE_PRUEBA}" +
+                    ". ${LoginViewModel.USUARIO_SUPERVISOR} / ${LoginViewModel.CLAVE_SUPERVISOR}",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

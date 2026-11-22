@@ -6,12 +6,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+
+class  Rol {EJECUTIVO, SUPERVISOR}
 data class LoginUiState(
     val usuario: String = "",
     val clave: String = "",
     val UsuarioError: String? = null,
     val ClaveError : String? = null,
-    val loginExitoso: Boolean = false
+    val loginExitoso: Boolean = false,
+    //
+    val rol: Rol = Rol.EJECUTIVO
 )
 
 class LoginViewModel : ViewModel(){
@@ -19,6 +23,10 @@ class LoginViewModel : ViewModel(){
     companion object{
         const val USUARIO_PRUEBA = "ejecutivo"
         const val  CLAVE_PRUEBA = "1234"
+
+        const val USUARIO_SUPERVISOR = "supervisor"
+
+        const val CLAVE_SUPERVISOR = "1234"
     }
 
     private val _uistate = MutableStateFlow(LoginUiState())
@@ -31,18 +39,24 @@ class LoginViewModel : ViewModel(){
     fun iniciarSesion(){
         val s = _uistate.value
         val usuarioError = if (s.usuario.isBlank()) "Campo obligatorio" else null
-        val  claveError = when {
-            s.clave.isBlank() -> "Campo obligatorio"
-            usuarioError == null &&
-                    (s.usuario.trim().lowercase() != USUARIO_PRUEBA || s.clave !=CLAVE_PRUEBA) ->
-                        "Usuario o clave incorrecta"
+        val usuario = s.usuario.trim()
+        val  rol = when {
+            usuario == USUARIO_PRUEBA && s.clave == CLAVE_PRUEBA -> Rol.EJECUTIVO
+            usuario == USUARIO_SUPERVISOR && s.clave == CLAVE_SUPERVISOR -> Rol.SUPERVISOR
+            else -> null
+        }
+
+        val claveError = when{
+            s.clave.isBlank() -> "campo obligatorio"
+            usuarioError == null && rol == null -> "usuario o cleve incorrecta"
             else -> null
         }
         _uistate.update {
             it.copy(
                 UsuarioError = usuarioError,
                 ClaveError = claveError,
-                loginExitoso = usuarioError == null && claveError == null
+                loginExitoso = usuarioError == null && claveError == null,
+                rol = rol ?: it.rol
             )
         }
     }
