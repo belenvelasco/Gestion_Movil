@@ -35,6 +35,8 @@ import com.example.gestion_movil.ui.oportunidad.DetalleOportunidadViewModel
 import com.example.gestion_movil.ui.oportunidad.ListaOportunidadesScreen
 import com.example.gestion_movil.ui.oportunidad.OportunidadFormScreen
 import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
+import com.example.gestion_movil.ui.panel.PanelSupervisorScreen
+import com.example.gestion_movil.ui.panel.PanelSupervisorViewModel
 
 object Rutas{
     const val  LOGIN = "login"

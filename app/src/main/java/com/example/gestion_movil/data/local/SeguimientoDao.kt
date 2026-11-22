@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SeguimientoDao {
 
-    @Query("SELECT * FROM seguimientos WHERE opotunidadId = :oportunidadId ORDER BY fecha DESC, id DESC")
+    @Query("SELECT * FROM seguimientos WHERE oportunidadId = :oportunidadId ORDER BY fecha DESC, id DESC")
     fun observarPorOportunidad(oportunidadId: Int): Flow<List<SeguimientoEntity>>
 
     @Query("SELECT * FROM seguimientos ORDER BY fecha DESC, id DESC")
