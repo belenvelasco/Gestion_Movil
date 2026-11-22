@@ -15,53 +15,60 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.res.painterResource
 import com.example.gestion_movil.R
+import com.google.android.gms.common.internal.GmsClientSupervisor
 
 @Composable
 fun MenuScreen(
+    esSupervisor: Boolean,
+    onVerPanel: () -> Unit,
     onVerOportunidades: () -> Unit,
     onNuevaOportunidades: () -> Unit,
     onEscanerQr: () -> Unit,
+    onVerCatalogo: () -> Unit,
     onCerrarSesion: () -> Unit
-){
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, alignment = Alignment.CenterVertically)
     ) {
-        Text("Menú principal",style = MaterialTheme.typography.headlineMedium)
-
-        Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
-            ContenidoBoton(R.drawable.ic_lists, "Ver oportunidades")
+        Text("Menú principal", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            if (esSupervisor) "Perfil: Supervisor" else "perfil: Ejecutivo",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        //
+        if (esSupervisor) {
+            Button(onClick = onVerPanel, modifier = Modifier.fillMaxWidth()) {
+                Text("panel del suprvisor")
+            }
+            Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
+                Text("ver oportunidades")
+            }
+        } else {
+            Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
+                Text("ver oportunidades")
+            }
+            Button(onClick = onNuevaOportunidades, modifier = Modifier.fillMaxWidth()) {
+                Text("nueva oportunidad")
+            }
+            Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {
+                Text("Escanar codigo QR")
+            }
+            Button(onClick = onVerCatalogo, modifier = Modifier.fillMaxWidth()) {
+                Text("Catologo de eventos")
+            }
         }
-
-        Button(onClick = onNuevaOportunidades, modifier = Modifier.fillMaxWidth()) {
-            ContenidoBoton(R.drawable.ic_add, "Nueva oportunidad")
-        }
-
-        Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {
-            ContenidoBoton(R.drawable.ic_scan_qr, "Escanear código QR")
-        }
-
         OutlinedButton(onClick = onCerrarSesion, modifier = Modifier.fillMaxWidth()) {
-            ContenidoBoton(R.drawable.ic_logout, "Cerrar sesión")
+            Text("cerrar sesion")
         }
     }
-}
-
-@Composable
-private fun ContenidoBoton(@DrawableRes icono: Int, texto: String) {
-    Icon(
-        painter = painterResource(icono),
-        contentDescription = null,
-        modifier = Modifier.size(ButtonDefaults.IconSize)
-    )
-    Spacer(Modifier.width(ButtonDefaults.IconSpacing))
-    Text(texto)
 }

@@ -1,4 +1,4 @@
-package com.example.gestion_movil.remote
+package com.example.gestion_movil.data.remote
 
 object RetrofitInstance{
 

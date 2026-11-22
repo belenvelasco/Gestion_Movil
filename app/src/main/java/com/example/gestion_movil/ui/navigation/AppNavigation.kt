@@ -18,12 +18,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.gestion_movil.camara.CamaraEvidenciaScreen
 import com.example.gestion_movil.lecturaQR.CameraPermissionHelper
+import com.example.gestion_movil.ui.eventos.EventosExternosScreen
+import com.example.gestion_movil.ui.eventos.EventosExternosViewModel
+import com.example.gestion_movil.ui.evidencias.EvidenciaViewModel
 import com.example.gestion_movil.ui.qr.QrScannerScreen
 import com.example.gestion_movil.ui.qr.QrViewModel
 import com.example.gestion_movil.ui.login.LoginScreen
 import com.example.gestion_movil.ui.login.LoginViewModel
 import com.example.gestion_movil.ui.menu.MenuScreen
+import com.example.gestion_movil.ui.oportunidad.DetalleOportunidadScreen
+import com.example.gestion_movil.ui.oportunidad.DetalleOportunidadViewModel
 import com.example.gestion_movil.ui.oportunidad.ListaOportunidadesScreen
 import com.example.gestion_movil.ui.oportunidad.OportunidadFormScreen
 import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
@@ -35,10 +41,21 @@ object Rutas{
 
     const val  LISTA = "lista"
 
+    const val DETALLE = "detalle/{id}"
+
     const val FORM = "form/{id}"
 
     const val  Qr = "Qr"
 
+    const val EVENTOS = "eventos"
+
+    const val CAMARA = "camara/{id}"
+
+    const val PANEL = "panel"
+
+    fun detalle(id: Int) = "detalle/$id"
+
+    fun camara(id: Int) = "camara/$id"
     fun form(id: Int) = "form/$id"
 }
 
@@ -64,18 +81,6 @@ fun AppNavigation(){
     NavHost(
         navController = navController,
         startDestination = Rutas.LOGIN,
-        enterTransition = {
-            slideInHorizontally(tween(300)) { it } + fadeIn(tween(300))
-        },
-        exitTransition = {
-            slideOutHorizontally(tween(300)) { -it / 3 } + fadeOut(tween(300))
-        },
-        popEnterTransition = {
-            slideInHorizontally(tween(300)) { -it / 3 } + fadeIn(tween(300))
-        },
-        popExitTransition = {
-            slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300))
-        }
     ) {
         composable(Rutas.LOGIN){
             LoginScreen(
@@ -89,10 +94,14 @@ fun AppNavigation(){
         }
 
         composable(Rutas.MENU){
+            val sesion by loginViewModel.uiState.collectAsState()
             MenuScreen(
+                esSupervisor = sesion.rol == Rol.SUPERVISOR,
+                onVerPanel = { navController.navigate(Rutas.PANEL)},
                 onVerOportunidades = {navController.navigate(Rutas.LISTA)},
                 onNuevaOportunidades = { navController.navigate(Rutas.form(0))},
                 onEscanerQr = { navController.navigate(Rutas.Qr)},
+                onVerCatalogo = {navController.navigate(Rutas.EVENTOS)},
                 onCerrarSesion = {
                     navController.navigate(Rutas.LOGIN){
                         popUpTo(Rutas.MENU) {inclusive = true}
@@ -105,24 +114,64 @@ fun AppNavigation(){
             ListaOportunidadesScreen(
                 viewModel = oportunidadViewModel,
                 onNueva = {navController.navigate(Rutas.form(0))},
-                onEditar = {id -> navController.navigate(Rutas.form(id))}
+                onVerDetalle = {id -> navController.navigate(Rutas.form(id))}
             )
         }
 
         composable(
-            route = Rutas.FORM,
+            route = Rutas.DETALLE,
             arguments = listOf(navArgument("id") {type = NavType.IntType})
-        ) {entrada ->
-            val id = entrada.arguments?.getInt("id")?: 0
-            OportunidadFormScreen(
+        ) { entrada ->
+            val id = entrada.arguments?.getInt("id") ?: 0
+            val detalleViewModel: DetalleOportunidadViewModel = viewModel()
+            val evidenciaViewModel: EvidenciaViewModel = viewModel()
+            DetalleOportunidadScreen(
                 id = id,
-                viewModel = oportunidadViewModel,
-                onVolver = {navController.popBackStack()}
+                viewModel = detalleViewModel,
+                evidenciaViewModel = evidenciaViewModel,
+                onEditar = { navController.navigate(Rutas.form(it)) },
+                onAbrirCamara = { navController.navigate(Rutas.camara(it)) }
+            )
+        }
+        composable(
+            route = Rutas.CAMARA,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { entrada ->
+            val id = entrada.arguments?.getInt("id") ?: 0
+            val evidenciaViewModel: EvidenciaViewModel = viewModel()
+            CamaraEvidenciaScreen(
+                oportunidadId = id,
+                viewModel = evidenciaViewModel,
+                onVolver = { navController.popBackStack() }
             )
         }
 
+        composable(Rutas.PANEL) {
+            val panelViewModel: PanelSupervisorViewModel = viewModel()
+            PanelSupervisorScreen(
+                viewModel = panelViewModel,
+                onVerDetalle = { id -> navController.navigate(Rutas.detalle(id)) }
+            )
+        }
 
-        composable(Rutas.Qr) {
+        composable(Rutas.EVENTOS) {
+            val eventosViewModel: EventosExternosViewModel = viewModel()
+            EventosExternosScreen(viewModel = eventosViewModel)
+        }
+
+        composable(
+            route = Rutas.FORM,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { entrada ->
+            val id = entrada.arguments?.getInt("id") ?: 0
+            OportunidadFormScreen(
+                id = id,
+                viewModel = oportunidadViewModel,
+                onVolver = { navController.popBackStack() }
+            )
+        }
+
+        composable(Rutas.QR) {
             // Mantiene la lista suscrita para poder buscar por código
             oportunidadViewModel.lista.collectAsState()
             LaunchedEffect(Unit) { qrViewModel.clearResult() }
@@ -134,8 +183,11 @@ fun AppNavigation(){
                     permissionLauncher.launch(android.Manifest.permission.CAMERA)
                 },
                 buscarOportunidad = { codigo -> oportunidadViewModel.buscarPorCodigo(codigo) },
-                onAbrirOportunidad = { id -> navController.navigate(Rutas.form(id)) }
+                onAbrirOportunidad = { id -> navController.navigate(Rutas.detalle(id)) }
             )
         }
+    }
+}
+
     }
 }

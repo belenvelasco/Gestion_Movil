@@ -1,8 +1,8 @@
 package com.example.gestion_movil.data.repository
 
 import com.example.gestion_movil.data.model.EventoExterno
-import com.example.gestion_movil.remote.ApiService
-import com.example.gestion_movil.remote.RetrofitInstance
+import com.example.gestion_movil.data.remote.ApiService
+import com.example.gestion_movil.data.remote.RetrofitInstance
 
 
 class EventoRepository(
@@ -29,7 +29,7 @@ class EventoRepository(
                 descripcion = (post.body ?: "").replace("\n", " ").trim(),
                 fecha = fechaDeEjemplo(hoy, post.id),
                 comuna = usuario?.address?.city ?: "Sin comuna",
-                organizacion = usuario?.company?.name ?: "Sin organización"
+                organizacion = usuario?.comany?.name ?: "Sin organización"
             )
         }
     }
