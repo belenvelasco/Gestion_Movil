@@ -11,7 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
+import com.example.gestion_movil.ui.panel.PanelSupervisorScreen
+import com.example.gestion_movil.ui.panel.PanelSupervisorViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost

@@ -14,12 +14,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import com.example.gestion_movil.data.model.EventoExterno
 import com.example.gestion_movil.util.Fechas
-
+import androidx.compose.foundation.lazy.items
 
 @Composable
 fun EventosExternosScreen(viewModel: EventosExternosViewModel) {
@@ -28,17 +28,17 @@ fun EventosExternosScreen(viewModel: EventosExternosViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Text("Catalogo de evento externos", Stayle = MaterialTheme.typography.headlineSmall)
+        Text("Catalogo de evento externos", style = MaterialTheme.typography.headlineSmall)
         Text(
-            "Datos de prueba"
+            "Datos de prueba",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         when {
-            estado.cargado -> {
+            estado.cargando  -> {
                 CircularProgressIndicator()
                 Text("Cargando eventos...", style = MaterialTheme.typography.bodyMedium)
             }
@@ -64,8 +64,6 @@ fun EventosExternosScreen(viewModel: EventosExternosViewModel) {
             }
         }
     }
-
-
 }
 
 @Composable

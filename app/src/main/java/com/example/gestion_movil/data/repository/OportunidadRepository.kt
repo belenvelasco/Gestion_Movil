@@ -70,7 +70,7 @@ class OportunidadRepository(
         }
         cambios.forEach { descripcion ->
             historiaDao.insertar(
-                HistoriaEntity(oportunidad = id, descripcion = descripcion, fecha = fecha)
+                HistoriaEntity(oportunidadId = id, descripcion = descripcion, fecha = fecha)
             )
         }
     }

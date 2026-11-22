@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestion_movil.data.local.AppDatabase
 import com.example.gestion_movil.data.local.OportunidadEntity
+import com.example.gestion_movil.data.model.ResumenPanel
 import com.example.gestion_movil.data.repository.OportunidadRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,16 +27,12 @@ class OportunidadViewModel(
 
     //
     val tipos = listOf(
-        "Eventos corporativo", "Feria empresarial", "Actividad municipal",
+        "Evento corporativo", "Feria empresarial", "Actividad municipal",
         "Jornada de beneficios", "Feria institucional", "Activacion comercial", "Otros"
     )
-    val pioridades = listOf("Alta", "Media", "Baja")
+    val prioridades = listOf("Alta", "Media", "Baja")
     val potenciales = listOf("Alta", "Media", "Baja")
-    val estados = listOf(
-        "Evento identificado", "Contacto pendiente", "Contacto relizado",
-        "Propuesta enviada", "En espera de respuesta", "Participacion corfirmada",
-        "Oportunidad descartada"
-    )
+    val estados = ResumenPanel.ESTADOS
     //
     val lista: StateFlow<List<OportunidadEntity>> = repository.oportunidades
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
@@ -46,7 +43,7 @@ class OportunidadViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyMap())
 
     //
-    val opcionesFiltro = listOf("Todas") + pioridades
+    val opcionesFiltro = listOf("Todas") + prioridades
 
     private val _busqueda= MutableStateFlow("")
     val busqueda: StateFlow<String> = _busqueda.asStateFlow()

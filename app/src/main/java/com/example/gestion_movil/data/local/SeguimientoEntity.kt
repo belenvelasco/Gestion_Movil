@@ -21,7 +21,7 @@ import androidx.room.PrimaryKey
 data class SeguimientoEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val opotunidadId: Int,
+    val oportunidadId: Int,
     val tipo: String,
     val nota: String,
     val proximaAccion: String = "",

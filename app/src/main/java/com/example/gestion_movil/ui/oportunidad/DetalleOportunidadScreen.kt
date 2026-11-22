@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.example.gestion_movil.data.local.ContactoEntity
 import com.example.gestion_movil.data.local.OportunidadEntity
 import com.example.gestion_movil.ui.componentes.CampoDesplegable
+import com.example.gestion_movil.ui.evidencias.EvidenciaViewModel
+import com.example.gestion_movil.ui.evidencias.SeccionEvidencias
 import com.example.gestion_movil.util.Fechas
 
 // Muestra una oportunidad completa con sus contactos, gestiones e historial de cambios
@@ -31,7 +33,9 @@ import com.example.gestion_movil.util.Fechas
 fun DetalleOportunidadScreen(
     id: Int,
     viewModel: DetalleOportunidadViewModel,
-    onEditar: (Int) -> Unit
+    evidenciaViewModel: EvidenciaViewModel,
+    onEditar: (Int) -> Unit,
+    onAbrirCamara:(Int) -> Unit
 ) {
     val oportunidad by viewModel.oportunidad.collectAsState()
     val organizacion by viewModel.organizacion.collectAsState()
@@ -40,8 +44,11 @@ fun DetalleOportunidadScreen(
     val historial by viewModel.historial.collectAsState()
     val estado by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(id) { viewModel.cargar(id) }
-
+val evidencias by evidenciaViewModel.evidencias.collectAsState()
+    LaunchedEffect(id) {
+        viewModel.cargar(id)
+        evidenciaViewModel.cargar(id)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -104,6 +111,12 @@ fun DetalleOportunidadScreen(
             ) {
                 Text("Registrar gestión")
             }
+
+            SeccionEvidencias(
+                evidencias = evidencias,
+                onAbrirCamara = {onAbrirCamara(id)},
+                onEliminar = {evidenciaViewModel.eliminar(it)}
+            )
 
             // ---------------- Historial de cambios ----------------
             Text("Historial de cambios", style = MaterialTheme.typography.titleMedium)

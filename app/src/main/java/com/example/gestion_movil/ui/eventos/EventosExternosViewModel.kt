@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 
 //
 data class EventosUiState(
@@ -53,9 +54,9 @@ class EventosExternosViewModel (
             try {
               val eventos = eventoRepository.obtenerEventos()
                 //
-              val fuentesExistentes = OportunidadRepository.oportunidades.first()
-                  .map{it.funte}
-                  .toSet()
+                val fuentesExistentes = oportunidadRepository.oportunidades.first()
+                    .map { it.fuente }
+                    .toSet()
                 val importados = eventos
                     .filter {fuenteDe(it) in fuentesExistentes}
                     .map {it.id}

@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.gestion_movil.data.local.AppDatabase
 import com.example.gestion_movil.data.local.ContactoEntity
 import com.example.gestion_movil.data.local.HistoriaEntity
-import com.example.gestion_movil.data.local.HistorialEntity
 import com.example.gestion_movil.data.local.OportunidadEntity
 import com.example.gestion_movil.data.local.SeguimientoEntity
 import com.example.gestion_movil.data.repository.GestionRepository
