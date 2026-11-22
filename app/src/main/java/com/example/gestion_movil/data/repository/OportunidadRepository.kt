@@ -22,7 +22,9 @@ class OportunidadRepository(
     fun historial (oportunidadId: Int): Flow<List<HistoriaEntity >> =
         historiaDao .observarPorOportunidad(oportunidadId)
 
-    fun observarPorId(id: Int): OportunidadEntity ?= dao.observarPorId(id)
+    fun observarPorId(id: Int): Flow<OportunidadEntity?> = dao.observarPorId(id)
+
+    suspend fun obtenerPorId(id: Int): OportunidadEntity? = dao.obtenerPorId(id)
 
     suspend fun obtenerOrganizacion(id: Int): OrganizacionEntity? = organizacionDao.obtenerPorId(id)
 
@@ -38,15 +40,14 @@ class OportunidadRepository(
     //
     suspend fun guardar(oportunidad: OportunidadEntity): Long {
         val ahora = System.currentTimeMillis()
-        val anterior = if (oportunidad.id !=0) dao.observarPorId(oportunidad.id) else null
-
+        val anterior = if (oportunidad.id != 0) dao.obtenerPorId(oportunidad.id) else null
         val resultado = dao.guardar(oportunidad.copy(fechaActualizacion = ahora))
-        //
-        val id = if(resultado == -1L) oportunidad.id.toLong() else resultado
-
+        // @Upsert devuelve -1 cuando actualiza una fila que ya existía
+        val id = if (resultado == -1L) oportunidad.id.toLong() else resultado
         registrarCambios(id.toInt(), anterior, oportunidad, ahora)
         return id
     }
+
 
     suspend fun eliminar(oportunidad: OportunidadEntity) = dao.eliminar(oportunidad)
 
