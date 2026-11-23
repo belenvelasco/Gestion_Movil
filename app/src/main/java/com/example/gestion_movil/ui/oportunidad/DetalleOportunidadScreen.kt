@@ -35,7 +35,9 @@ fun DetalleOportunidadScreen(
     viewModel: DetalleOportunidadViewModel,
     evidenciaViewModel: EvidenciaViewModel,
     onEditar: (Int) -> Unit,
-    onAbrirCamara:(Int) -> Unit
+    onAbrirCamara:(Int) -> Unit,
+    onAbrirActivacion: (Int) -> Unit,
+
 ) {
     val oportunidad by viewModel.oportunidad.collectAsState()
     val organizacion by viewModel.organizacion.collectAsState()
@@ -66,6 +68,12 @@ val evidencias by evidenciaViewModel.evidencias.collectAsState()
 
             Button(onClick = { onEditar(id) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Editar oportunidad")
+            }
+            OutlinedButton(
+                onClick = { onAbrirActivacion(id) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Gestionar activación")
             }
 
             // ---------------- Contactos ----------------
@@ -290,4 +298,6 @@ private fun TarjetaContacto(contacto: ContactoEntity, onEliminar: () -> Unit) {
             TextButton(onClick = onEliminar) { Text("Eliminar contacto") }
         }
     }
+
 }
+

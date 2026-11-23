@@ -33,7 +33,12 @@ import com.example.gestion_movil.util.Fechas
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.collections.forEach
-
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 @Composable
 fun SeccionEvidencias(
     evidencias: List<EvidenciaEntity>,
@@ -53,17 +58,28 @@ fun SeccionEvidencias(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 val esVideo = evidencia.tipo == EvidenciaEntity.VIDEO
+                val esDocumento = evidencia.tipo == EvidenciaEntity.DOCUMENTO
+                val etiqueta = when{
+                    esVideo -> "video"
+                    esDocumento -> "Documento"
+                    else -> "Foto"
+                }
                 Text(
-                    "${if (esVideo) "Video" else "Foto"} · ${Fechas.formatearConHora(evidencia.fecha)}",
+                    "$etiqueta ·${Fechas.formatearConHora(evidencia.fecha)}",
                     style = MaterialTheme.typography.titleSmall
                 )
-                if (!esVideo) {
+                if (!esDocumento) {
+                    Text(
+                        evidencia.nombre.ifBlank { "Documento adjunto" },
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                } else if (!esVideo){
                     MiniaturaFoto(evidencia.ruta)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (esVideo) {
-                        OutlinedButton(onClick = { videoAbierto = evidencia }) {
-                            Text("Reproducir")
+                        OutlinedButton(onClick = { abrirDocumento (contexto, evidencia.ruta)}) {
+                            Text("abrir")
                         }
                     }
                     TextButton(onClick = { onEliminar(evidencia) }) { Text("Eliminar evidencia") }
@@ -119,5 +135,18 @@ private fun MiniaturaFoto(ruta: String) {
                 .fillMaxWidth()
                 .height(200.dp)
         )
+    }
+}
+
+private fun abrirDocumento(context: Context, ruta: String){
+    val uri= Uri.parse(ruta)
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, context.contentResolver.getType(uri) ?:"*/*")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    try {
+        context.startActivity(intent)
+    }catch (e: ActivityNotFoundException) {
+        Toast.makeText(context,"No hay una app para abrir este documento", Toast.LENGTH_SHORT).show()
     }
 }

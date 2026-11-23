@@ -16,7 +16,11 @@ class EvidenciaRepository(
 
     suspend fun agregar(evidencia: EvidenciaEntity): Long {
         val id = evidenciaDao.insertar(evidencia)
-        val que = if (evidencia.tipo == EvidenciaEntity.VIDEO) "Video" else "Foto"
+        val que = when(evidencia.tipo){
+            EvidenciaEntity.VIDEO -> "video"
+            EvidenciaEntity.DOCUMENTO -> "Documento"
+            else -> "Foto"
+        }
         historiaDao.insertar(
             HistoriaEntity(
                 oportunidadId = evidencia.oportunidadId,

@@ -14,9 +14,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         ContactoEntity::class,
         SeguimientoEntity::class,
         HistoriaEntity::class,
-        EvidenciaEntity::class
+        EvidenciaEntity::class,
+        ActivacionEntity::class,
+        ResultadoEntity::class
                ],
-    version = 4,
+    version = 6,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -29,6 +31,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun seguimientoDao():SeguimientoDao
     abstract fun historiaDao(): HistoriaDao
     abstract fun evidenciaDao(): EvidenciaDao
+
+    abstract fun activacionDao(): ActivacionDao
+
+    abstract fun resultadoDao(): ResultadoDao
 
     companion object {
         //longitud y longitud Ubicacion
@@ -56,5 +62,42 @@ abstract class AppDatabase : RoomDatabase() {
                     .fallbackToDestructiveMigration()
                     .build().also { INSTANCE = it }
             }
+        private val MIGRACION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE evidencias ADD COLUMN nombre TEXT NOT NULL DEFAULT ''")
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `activaciones` (" +
+                            "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                            "`oportunidadId` INTEGER NOT NULL, " +
+                            "`espacio` TEXT NOT NULL, " +
+                            "`fechaActivacion` INTEGER, " +
+                            "`costo` INTEGER, " +
+                            "`requisitos` TEXT NOT NULL, " +
+                            "`responsable` TEXT NOT NULL, " +
+                            "FOREIGN KEY(`oportunidadId`) REFERENCES `oportunidades`(`id`) " +
+                            "ON UPDATE NO ACTION ON DELETE CASCADE)"
+                )
+                db.execSQL(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS `index_activaciones_oportunidadId` " +
+                            "ON `activaciones` (`oportunidadId`)"
+                )
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `resultados` (" +
+                            "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                            "`oportunidadId` INTEGER NOT NULL, " +
+                            "`resultado` TEXT NOT NULL, " +
+                            "`observaciones` TEXT NOT NULL, " +
+                            "`impacto` TEXT NOT NULL, " +
+                            "`cerrada` INTEGER NOT NULL, " +
+                            "`fecha` INTEGER NOT NULL, " +
+                            "FOREIGN KEY(`oportunidadId`) REFERENCES `oportunidades`(`id`) " +
+                            "ON UPDATE NO ACTION ON DELETE CASCADE)"
+                )
+                db.execSQL(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS `index_resultados_oportunidadId` " +
+                            "ON `resultados` (`oportunidadId`)"
+                )
+            }
+        }
     }
 }

@@ -34,10 +34,14 @@ class EvidenciaViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // La cámara ya guardó el archivo; aquí se registra en Room
-    fun registrar(oportunidadId: Int, tipo: String, ruta: String) {
+    fun registrar(oportunidadId: Int, tipo: String, ruta: String, nombre: String = "") {
         viewModelScope.launch {
             repository.agregar(
-                EvidenciaEntity(oportunidadId = oportunidadId, tipo = tipo, ruta = ruta)
+                EvidenciaEntity(
+                    oportunidadId = oportunidadId,
+                    tipo = tipo,
+                    ruta = ruta,
+                    nombre = nombre)
             )
         }
     }

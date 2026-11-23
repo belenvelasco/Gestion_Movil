@@ -37,7 +37,8 @@ import com.example.gestion_movil.ui.oportunidad.OportunidadFormScreen
 import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
 import com.example.gestion_movil.ui.servidor.ServidorScreen
 import com.example.gestion_movil.ui.servidor.ServidorViewModel
-
+import com.example.gestion_movil.ui.activacion.ActivacionScreen
+import com.example.gestion_movil.ui.activacion.ActivacionViewModel
 
 object Rutas{
     const val  LOGIN = "login"
@@ -62,6 +63,9 @@ object Rutas{
 
     const val SERVIDOR = "servidor"
 
+    const val ACTIVACION = "activacion/{id}"
+
+    fun activacion(id: Int) = "activacion/{id}"
     fun detalle(id: Int) = "detalle/$id"
 
     fun camara(id: Int) = "camara/$id"
