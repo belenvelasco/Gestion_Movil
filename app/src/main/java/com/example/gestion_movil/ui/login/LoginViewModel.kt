@@ -11,8 +11,8 @@ enum class  Rol {EJECUTIVO, SUPERVISOR}
 data class LoginUiState(
     val usuario: String = "",
     val clave: String = "",
-    val UsuarioError: String? = null,
-    val ClaveError : String? = null,
+    val usuarioError: String? = null,
+    val claveError : String? = null,
     val loginExitoso: Boolean = false,
     //
     val rol: Rol = Rol.EJECUTIVO
@@ -32,25 +32,35 @@ class LoginViewModel : ViewModel(){
     private val _uistate = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> =  _uistate.asStateFlow()
 
-    fun onUsuario(v: String) = _uistate.update { it.copy(usuario = v, UsuarioError = null) }
+    fun onUsuario(v: String) = _uistate.update { it.copy(usuario = v, usuarioError = null) }
 
-    fun onClave(v: String) = _uistate.update { it.copy(clave = v, ClaveError = null) }
+    fun onClave(v: String) = _uistate.update { it.copy(clave = v, claveError = null) }
 
-    fun iniciarSesion(){
+    fun iniciarSesion() {
         val s = _uistate.value
-        val usuarioError = if (s.usuario.isBlank()) "Campo obligatorio" else null
-        val claveError = when{
-            s.clave.isBlank() -> "Campo obligatorio"
-            usuarioError == null &&
-                    (s.usuario.trim() != USUARIO_PRUEBA || s.clave != CLAVE_PRUEBA) ->
-                        "Usuario o clave incorrectos"
-            else -> null
+        val usuario = s.usuario.trim()
+
+        val usuarioError = if (usuario.isBlank()) "Campo obligatorio" else null
+        val claveError = if (s.clave.isBlank()) "Campo obligatorio" else null
+
+        var rol: Rol? = null
+        var credencialesError: String? = null
+
+        if (usuarioError == null && claveError == null) {
+            rol = when {
+                usuario == USUARIO_PRUEBA && s.clave == CLAVE_PRUEBA -> Rol.EJECUTIVO
+                usuario == USUARIO_SUPERVISOR && s.clave == CLAVE_SUPERVISOR -> Rol.SUPERVISOR
+                else -> null
+            }
+            if (rol == null) credencialesError = "Usuario o clave incorrectos"
         }
+
         _uistate.update {
             it.copy(
-                UsuarioError = usuarioError,
-                ClaveError = claveError,
-                loginExitoso = usuarioError == null && claveError == null,
+                usuarioError = usuarioError,
+                claveError = claveError ?: credencialesError,
+                rol = rol ?: it.rol,
+                loginExitoso = rol != null
             )
         }
     }
