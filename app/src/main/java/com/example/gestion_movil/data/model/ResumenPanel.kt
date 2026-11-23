@@ -79,8 +79,8 @@ data class ResumenPanel(
                 porResponsable = (Responsable.LISTA + Responsable.SIN_ASIGNAR).map { r ->
                     r to abiertas.count{ Responsable.mostrar(it.responsable) == r}
                 },
-                altaSinResponsable =  abiertas.count{
-                    it.prioridad == "Alta" && it.responsable.isBlank()
+                altaSinResponsable = abiertas.count {
+                    it.prioridad == "Alta" && Responsable.estaVacio(it.responsable)
                 },
                 proximosEventos = proximos,
                 accionesPendientes = pendientes
