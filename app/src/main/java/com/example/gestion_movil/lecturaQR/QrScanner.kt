@@ -89,7 +89,7 @@ fun QrScanner(
                 Size(1280, 720),
                 ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
             )
-        )
+        ).build()
     val imageAnalysis = ImageAnalysis.Builder()
         .setResolutionSelector(resolucion)
         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)

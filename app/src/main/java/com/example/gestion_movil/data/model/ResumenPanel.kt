@@ -17,6 +17,8 @@ data class ResumenPanel(
     val altaPrioridadAbiertas: Int = 0,
     val porEstado: List<Pair<String, Int>> = emptyList(),
     val porPrioridad: List<Pair<String, Int>> = emptyList(),
+    val porResponsable: List<Pair<String, Int>> = emptyList(),
+    val altaSinResponsable: Int = 0,
     val proximosEventos: List<OportunidadEntity> = emptyList(),
     val accionesPendientes: List<AccionPendiente> = emptyList()
 ) {
@@ -74,6 +76,12 @@ data class ResumenPanel(
                 altaPrioridadAbiertas = abiertas.count { it.prioridad == "Alta" },
                 porEstado = ESTADOS.map { e -> e to oportunidades.count { it.estado == e } },
                 porPrioridad = PRIORIDADES.map { p -> p to oportunidades.count { it.prioridad == p } },
+                porResponsable = (Responsable.LISTA + Responsable.SIN_ASIGNAR).map { r ->
+                    r to abiertas.count{ Responsable.mostrar(it.responsable) == r}
+                },
+                altaSinResponsable =  abiertas.count{
+                    it.prioridad == "Alta" && it.responsable.isBlank()
+                },
                 proximosEventos = proximos,
                 accionesPendientes = pendientes
             )
