@@ -45,6 +45,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.gestion_movil.ubicacion.UbicacionHelper
 import java.util.Locale
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
+import com.example.gestion_movil.ui.componentes.CampoFecha
 
 @Composable
 fun MensajeError(texto: String?) {
@@ -120,6 +123,46 @@ fun OportunidadFormScreen(
             error = estado.tipoError,
             icono = R.drawable.ic_list,
             onSeleccion = viewModel::onTipo
+        )
+
+        OutlinedTextField(
+            value = estado.organizacion,
+            onValueChange = viewModel::onOrganizacion,
+            label = { Text("Organizacion") },
+            leadingIcon = { Icon(painterResource(R.drawable.ic_edit), null) },
+            trailingIcon = iconoError(estado.organizacionError != null),
+            isError = estado.organizacionError != null,
+            supportingText = { MensajeError(estado.organizacionError) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        CampoFecha(
+            label = "Fecha del evento",
+            fechaMillis = estado.fechaEvento,
+            error = estado.fuenteError,
+            onFecha = {viewModel.onFechaEvento(it)}
+        )
+
+        OutlinedTextField(
+            value = estado.comuna,
+            onValueChange = viewModel::onComuna,
+            label = { Text("comuna") },
+            leadingIcon = { Icon(painterResource(R.drawable.ic_description), null) },
+            trailingIcon = iconoError(estado.comunaError != null),
+            isError = estado.comunaError != null,
+            supportingText = { MensajeError(estado.comunaError) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = estado.publicoEsperado,
+            onValueChange = viewModel::onPublicoEsperado,
+            label = { Text("Pueblico esperado (opcional)") },
+            leadingIcon = { Icon(painterResource(R.drawable.ic_description), null) },
+            trailingIcon = iconoError(estado.publicoEsperadoError != null),
+            isError = estado.publicoEsperadoError != null,
+            supportingText = { MensajeError(estado.publicoEsperadoError) },
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
