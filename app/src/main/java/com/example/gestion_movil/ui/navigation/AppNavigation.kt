@@ -65,7 +65,7 @@ object Rutas{
 
     const val ACTIVACION = "activacion/{id}"
 
-    fun activacion(id: Int) = "activacion/{id}"
+    fun activacion(id: Int) = "activacion/$id"
     fun detalle(id: Int) = "detalle/$id"
 
     fun camara(id: Int) = "camara/$id"
@@ -163,6 +163,22 @@ fun AppNavigation(){
                 onVolver = { navController.popBackStack() }
             )
         }
+
+        composable(
+            route = Rutas.ACTIVACION,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { entrada ->
+            val id = entrada.arguments?.getInt("id") ?: 0
+            val activacionViewModel: ActivacionViewModel = viewModel()
+            val evidenciaViewModel: EvidenciaViewModel = viewModel()
+            ActivacionScreen(
+                id = id,
+                viewModel = activacionViewModel,
+                evidenciaViewModel = evidenciaViewModel,
+                onAbrirCamara = { navController.navigate(Rutas.camara(it)) }
+            )
+        }
+
         composable (Rutas.CAMERA_LIBRE) {
             CamaraLibreScreen(onVolver = {navController.popBackStack()})
         }
