@@ -78,8 +78,8 @@ fun SeccionEvidencias(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (esVideo) {
-                        OutlinedButton(onClick = { abrirDocumento (contexto, evidencia.ruta)}) {
-                            Text("abrir")
+                        OutlinedButton(onClick = { videoAbierto = evidencia}) {
+                            Text("reprducirr")
                         }
                     }
                     TextButton(onClick = { onEliminar(evidencia) }) { Text("Eliminar evidencia") }

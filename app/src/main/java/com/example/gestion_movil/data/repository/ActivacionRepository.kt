@@ -1,7 +1,5 @@
 package com.example.gestion_movil.data.repository
 
-package com.example.gestion_movil.data.repository
-
 import com.example.gestion_movil.data.local.ActivacionDao
 import com.example.gestion_movil.data.local.ActivacionEntity
 import com.example.gestion_movil.data.local.HistoriaDao
@@ -24,7 +22,7 @@ class ActivacionRepository(
         activacionDao.guardar(activacion)
         historiaDao.insertar(
             HistoriaEntity(
-                oportunidadId = activacion.oportunidadId,
+                oportunidadId = activacion.oportunidaId,
                 descripcion = "Condiciones de la activación actualizadas " +
                         "(responsable: ${activacion.responsable})"
             )

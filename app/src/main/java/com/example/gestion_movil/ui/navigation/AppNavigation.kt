@@ -147,7 +147,8 @@ fun AppNavigation(){
                 viewModel = detalleViewModel,
                 evidenciaViewModel = evidenciaViewModel,
                 onEditar = { navController.navigate(Rutas.form(it)) },
-                onAbrirCamara = { navController.navigate(Rutas.camara(it)) }
+                onAbrirCamara = { navController.navigate(Rutas.camara(it)) },
+                onAbrirActivacion = {navController.navigate(Rutas.activacion(it))}
             )
         }
         composable(
