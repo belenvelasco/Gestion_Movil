@@ -14,17 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.ui.res.painterResource
-import com.example.gestion_movil.R
 
 @Composable
 fun LoginScreen(
@@ -55,8 +47,8 @@ fun LoginScreen(
             onValueChange = viewModel::onUsuario,
             label = { Text("Usuario") },
             singleLine = true,
-            isError = estado.UsuarioError != null,
-            supportingText = { Text(estado.UsuarioError ?: "") },
+            isError = estado.usuarioError != null,
+            supportingText = { Text(estado.usuarioError ?: "") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -66,8 +58,8 @@ fun LoginScreen(
             label = { Text("Clave") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            isError = estado.ClaveError != null,
-            supportingText = { Text(estado.ClaveError ?: "") },
+            isError = estado.claveError != null,
+            supportingText = { Text(estado.claveError ?: "") },
             modifier = Modifier.fillMaxWidth()
         )
 
