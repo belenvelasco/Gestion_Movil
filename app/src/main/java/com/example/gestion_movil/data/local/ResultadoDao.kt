@@ -7,7 +7,7 @@ import androidx.room.Query
 
 @Dao
 interface ResultadoDao{
-    @Query("SELECT * FROM resultado WHERE oportunidadId = :oportunidadId LINIT 1")
+    @Query("SELECT * FROM resultados  WHERE oportunidadId  = :oportunidadId  LIMIT  1")
     suspend fun obtener(oportunidadId: Int): ResultadoEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

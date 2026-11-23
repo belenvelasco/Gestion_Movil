@@ -11,16 +11,16 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = OportunidadEntity::class,
             parentColumns = ["id"],
-            childColumns = ["OportunidadId"],
+            childColumns = ["oportunidadId"],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["oportunidades"], unique = true)]
+    indices = [Index(value = ["oportunidadId"], unique = true)]
 )
 
 data class ActivacionEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val oportunidaId: Int,
+    val oportunidadId: Int,
     val espacio: String = "",
     val fechaActivacion: Long? = null,
     val costo: Int? = null,

@@ -22,7 +22,7 @@ class ActivacionRepository(
         activacionDao.guardar(activacion)
         historiaDao.insertar(
             HistoriaEntity(
-                oportunidadId = activacion.oportunidaId,
+                oportunidadId = activacion.oportunidadId,
                 descripcion = "Condiciones de la activación actualizadas " +
                         "(responsable: ${activacion.responsable})"
             )

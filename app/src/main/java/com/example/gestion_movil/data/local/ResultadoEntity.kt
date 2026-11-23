@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "resultado",
+    tableName = "resultados",
     foreignKeys = [
         ForeignKey(
             entity = OportunidadEntity::class,

@@ -139,7 +139,7 @@ class ActivacionViewModel(
         viewModelScope.launch {
             repository.guardarActivacion(
                 ActivacionEntity(
-                    oportunidaId = id,
+                    oportunidadId  = id,
                     espacio = s.espacio.trim(),
                     fechaActivacion = s.fecha,
                     costo = costo,
