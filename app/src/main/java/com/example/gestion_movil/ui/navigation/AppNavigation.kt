@@ -35,8 +35,9 @@ import com.example.gestion_movil.ui.oportunidad.DetalleOportunidadViewModel
 import com.example.gestion_movil.ui.oportunidad.ListaOportunidadesScreen
 import com.example.gestion_movil.ui.oportunidad.OportunidadFormScreen
 import com.example.gestion_movil.ui.oportunidad.OportunidadViewModel
-import com.example.gestion_movil.ui.panel.PanelSupervisorScreen
-import com.example.gestion_movil.ui.panel.PanelSupervisorViewModel
+import com.example.gestion_movil.ui.servidor.ServidorScreen
+import com.example.gestion_movil.ui.servidor.ServidorViewModel
+
 
 object Rutas{
     const val  LOGIN = "login"
@@ -56,6 +57,8 @@ object Rutas{
     const val CAMARA = "camara/{id}"
 
     const val PANEL = "panel"
+
+    const val SERVIDOR = "servidor"
 
     fun detalle(id: Int) = "detalle/$id"
 
@@ -108,6 +111,7 @@ fun AppNavigation(){
                 onNuevaOportunidades = { navController.navigate(Rutas.form(0))},
                 onEscanerQr = { navController.navigate(Rutas.Qr)},
                 onVerCatalogo = {navController.navigate(Rutas.EVENTOS)},
+                onVerServidor = {navController.navigate(Rutas.SERVIDOR)},
                 onCerrarSesion = {
                     navController.navigate(Rutas.LOGIN){
                         popUpTo(Rutas.MENU) {inclusive = true}
@@ -191,6 +195,11 @@ fun AppNavigation(){
                 buscarOportunidad = { codigo -> oportunidadViewModel.buscarPorCodigo(codigo) },
                 onAbrirOportunidad = { id -> navController.navigate(Rutas.detalle(id)) }
             )
+        }
+
+        composable(Rutas.SERVIDOR) {
+            val servidorViewModel: ServidorViewModel = viewModel()
+            ServidorScreen(servidorViewModel)
         }
     }
 }

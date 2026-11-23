@@ -45,7 +45,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.gestion_movil.data.local.EvidenciaEntity
 import com.example.gestion_movil.ui.evidencias.EvidenciaViewModel
 import com.example.gestion_movil.util.ArchivosEvidencia
-import androidx.camera.video.AudioConfig
+import androidx.camera.view.video.AudioConfig
 @SuppressLint("MissingPermission")
 @Composable
 fun CamaraEvidenciaScreen(

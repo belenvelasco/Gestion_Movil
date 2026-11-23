@@ -32,6 +32,7 @@ fun MenuScreen(
     onNuevaOportunidades: () -> Unit,
     onEscanerQr: () -> Unit,
     onVerCatalogo: () -> Unit,
+    onVerServidor: () -> Unit,
     onCerrarSesion: () -> Unit
 ) {
     Column(
@@ -48,17 +49,17 @@ fun MenuScreen(
         //
         if (esSupervisor) {
             Button(onClick = onVerPanel, modifier = Modifier.fillMaxWidth()) {
-                Text("panel del suprvisor")
+                Text("Panel del suprvisor")
             }
             Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
-                Text("ver oportunidades")
+                Text("Ver oportunidades")
             }
         } else {
             Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
-                Text("ver oportunidades")
+                Text("Ver oportunidades")
             }
             Button(onClick = onNuevaOportunidades, modifier = Modifier.fillMaxWidth()) {
-                Text("nueva oportunidad")
+                Text("Nueva oportunidad")
             }
             Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {
                 Text("Escanar codigo QR")
@@ -66,9 +67,12 @@ fun MenuScreen(
             Button(onClick = onVerCatalogo, modifier = Modifier.fillMaxWidth()) {
                 Text("Catologo de eventos")
             }
+            Button(onClick = onVerServidor, modifier = Modifier.fillMaxWidth()) {
+                Text("Oportunidades del servidor")
+            }
         }
         OutlinedButton(onClick = onCerrarSesion, modifier = Modifier.fillMaxWidth()) {
-            Text("cerrar sesion")
+            Text("Cerrar sesión")
         }
     }
 }
