@@ -53,7 +53,7 @@ data class ResumenPanel(
             // Solo cuenta la última gestión de cada oportunidad
             val porId = oportunidades.associateBy { it.id }
             val pendientes = seguimientos
-                .groupBy { it.id }
+                .groupBy { it.oportunidadId}
                 .mapNotNull { (id, lista) ->
                     val ultima = lista.maxWithOrNull(compareBy({ it.fecha }, { it.id }))
                     val oportunidad = porId[id]

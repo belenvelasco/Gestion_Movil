@@ -25,6 +25,9 @@ data class OportunidadEntity(
     val organizacionId: Int? = null,
     val latitud: Double? = null,
     val longitud: Double? = null,
+    //
+    @ColumnInfo(defaultValue = "''")
+    val  responsable: String = "''",
     val fechaDeteccion: Long = System.currentTimeMillis(),
     val fechaActualizacion: Long = System.currentTimeMillis()
 )
