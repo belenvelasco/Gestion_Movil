@@ -70,8 +70,8 @@ class EventosExternosViewModel (
                 _uiState.update {
                     it.copy(
                         cargando = false,
-                        error = "No se pudo cargar el catalogo" +
-                        "Revisa tu conexion a internet e inente de vuevo"
+                        error = "No se pudo cargar el catálogo." +
+                        " Revisa tu conexión a internet e inténtalo de nuevo"
                     )
                 }
             }

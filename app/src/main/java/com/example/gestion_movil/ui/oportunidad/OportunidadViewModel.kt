@@ -38,7 +38,7 @@ class OportunidadViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     //
-    val organizacionesPorId: StateFlow<Map<Int, String>> = repository.oportunidades
+    val organizacionesPorId: StateFlow<Map<Int, String>> = repository.organizaciones
         .map { organizaciones -> organizaciones.associate { it.id to it.nombre } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyMap())
 
