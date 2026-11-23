@@ -36,13 +36,13 @@ fun MenuScreen(
     ) {
         Text("Menú principal", style = MaterialTheme.typography.headlineMedium)
         Text(
-            if (esSupervisor) "Perfil: Supervisor" else "perfil: Ejecutivo",
+            if (esSupervisor) "Perfil: Supervisor" else "Perfil: Ejecutivo",
             style = MaterialTheme.typography.bodyMedium
         )
         //
         if (esSupervisor) {
             Button(onClick = onVerPanel, modifier = Modifier.fillMaxWidth()) {
-                Text("Panel del suprvisor")
+                Text("Panel del supervisor")
             }
             Button(onClick = onVerOportunidades, modifier = Modifier.fillMaxWidth()) {
                 Text("Ver oportunidades")
@@ -55,13 +55,13 @@ fun MenuScreen(
                 Text("Nueva oportunidad")
             }
             Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {
-                Text("Escanar codigo QR")
+                Text("Escanar código QR")
             }
             Button(onClick =  onCamera, modifier = Modifier.fillMaxWidth()) {
-                Text("camara (foto y video)")
+                Text("Cámara (foto y video)")
             }
             Button(onClick = onVerCatalogo, modifier = Modifier.fillMaxWidth()) {
-                Text("Catologo de eventos")
+                Text("Catálogo de eventos")
             }
             Button(onClick = onVerServidor, modifier = Modifier.fillMaxWidth()) {
                 Text("Oportunidades del servidor")

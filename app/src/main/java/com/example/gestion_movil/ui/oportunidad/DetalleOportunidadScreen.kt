@@ -27,11 +27,14 @@ import com.example.gestion_movil.ui.componentes.CampoDesplegable
 import com.example.gestion_movil.ui.evidencias.EvidenciaViewModel
 import com.example.gestion_movil.ui.evidencias.SeccionEvidencias
 import com.example.gestion_movil.util.Fechas
+import com.example.gestion_movil.data.model.Responsable
+import com.example.gestion_movil.data.model.ResumenPanel
 
 // Muestra una oportunidad completa con sus contactos, gestiones e historial de cambios
 @Composable
 fun DetalleOportunidadScreen(
     id: Int,
+    esSupervisor: Boolean,
     viewModel: DetalleOportunidadViewModel,
     evidenciaViewModel: EvidenciaViewModel,
     onEditar: (Int) -> Unit,
@@ -66,8 +69,26 @@ val evidencias by evidenciaViewModel.evidencias.collectAsState()
 
             DatosOportunidad(actual, organizacion)
 
-            Button(onClick = { onEditar(id) }, modifier = Modifier.fillMaxWidth()) {
-                Text("Editar oportunidad")
+            if (esSupervisor) {
+                Text("Supervisión y prioridades", style = MaterialTheme.typography.titleMedium)
+                CampoDesplegable(
+                    label = "Prioridad",
+                    valor = actual.prioridad,
+                    opciones = ResumenPanel.PRIORIDADES,
+                    error = null,
+                    onSeleccion = { viewModel.ajustarPrioridad(it) }
+                )
+                CampoDesplegable(
+                    label = "Responsable",
+                    valor = Responsable.mostrar(actual.responsable),
+                    opciones = Responsable.LISTA,
+                    error = null,
+                    onSeleccion = { viewModel.reasignarResponsable(it) }
+                )
+            } else {
+                Button(onClick = { onEditar(id) }, modifier = Modifier.fillMaxWidth()) {
+                    Text("Editar oportunidad")
+                }
             }
             OutlinedButton(
                 onClick = { onAbrirActivacion(id) },
@@ -84,11 +105,13 @@ val evidencias by evidenciaViewModel.evidencias.collectAsState()
             contactos.forEach { contacto ->
                 TarjetaContacto(contacto, onEliminar = { viewModel.eliminarContacto(contacto) })
             }
-            OutlinedButton(
-                onClick = { viewModel.abrirFormContacto() },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Agregar contacto")
+            if (!esSupervisor){
+                OutlinedButton(
+                    onClick = { viewModel.abrirFormContacto() },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Agregar contacto")
+                }
             }
 
             // ---------------- Gestiones y propuestas ----------------
@@ -113,11 +136,13 @@ val evidencias by evidenciaViewModel.evidencias.collectAsState()
                     }
                 }
             }
-            OutlinedButton(
-                onClick = { viewModel.abrirFormGestion() },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Registrar gestión")
+            if (!esSupervisor){
+                OutlinedButton(
+                    onClick = { viewModel.abrirFormGestion() },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Registrar gestión")
+                }
             }
 
             SeccionEvidencias(

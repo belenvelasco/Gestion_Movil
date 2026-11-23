@@ -128,7 +128,7 @@ fun OportunidadFormScreen(
         OutlinedTextField(
             value = estado.organizacion,
             onValueChange = viewModel::onOrganizacion,
-            label = { Text("Organizacion") },
+            label = { Text("Organización") },
             leadingIcon = { Icon(painterResource(R.drawable.ic_edit), null) },
             trailingIcon = iconoError(estado.organizacionError != null),
             isError = estado.organizacionError != null,
@@ -146,7 +146,7 @@ fun OportunidadFormScreen(
         OutlinedTextField(
             value = estado.comuna,
             onValueChange = viewModel::onComuna,
-            label = { Text("comuna") },
+            label = { Text("Comuna") },
             leadingIcon = { Icon(painterResource(R.drawable.ic_description), null) },
             trailingIcon = iconoError(estado.comunaError != null),
             isError = estado.comunaError != null,
@@ -157,7 +157,7 @@ fun OportunidadFormScreen(
         OutlinedTextField(
             value = estado.publicoEsperado,
             onValueChange = viewModel::onPublicoEsperado,
-            label = { Text("Pueblico esperado (opcional)") },
+            label = { Text("Publico esperado (opcional)") },
             leadingIcon = { Icon(painterResource(R.drawable.ic_description), null) },
             trailingIcon = iconoError(estado.publicoEsperadoError != null),
             isError = estado.publicoEsperadoError != null,

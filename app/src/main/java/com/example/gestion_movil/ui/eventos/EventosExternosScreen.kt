@@ -31,7 +31,7 @@ fun EventosExternosScreen(viewModel: EventosExternosViewModel) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Text("Catalogo de evento externos", style = MaterialTheme.typography.headlineSmall)
+        Text("Catálogo de evento externos", style = MaterialTheme.typography.headlineSmall)
         Text(
             "Datos de prueba",
             style = MaterialTheme.typography.bodySmall,
@@ -78,8 +78,8 @@ private fun TarjetaEvento(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(evento.nombre, style = MaterialTheme.typography.titleMedium)
-            Text("Organizacion: ${evento.organizacion}", style = MaterialTheme.typography.bodyMedium)
-            Text("comuna: ${evento.comuna}", style = MaterialTheme.typography.bodyMedium)
+            Text("Organización: ${evento.organizacion}", style = MaterialTheme.typography.bodyMedium)
+            Text("Comuna: ${evento.comuna}", style = MaterialTheme.typography.bodyMedium)
             Text(
                 "Fecha(ejemplo): ${Fechas.formatearEvento(evento.fecha)}",
                 style = MaterialTheme.typography.bodyMedium

@@ -142,8 +142,10 @@ fun AppNavigation(){
             val id = entrada.arguments?.getInt("id") ?: 0
             val detalleViewModel: DetalleOportunidadViewModel = viewModel()
             val evidenciaViewModel: EvidenciaViewModel = viewModel()
+            val sesion by loginViewModel.uiState.collectAsState()
             DetalleOportunidadScreen(
                 id = id,
+                esSupervisor = sesion.rol == Rol.SUPERVISOR,
                 viewModel = detalleViewModel,
                 evidenciaViewModel = evidenciaViewModel,
                 onEditar = { navController.navigate(Rutas.form(it)) },

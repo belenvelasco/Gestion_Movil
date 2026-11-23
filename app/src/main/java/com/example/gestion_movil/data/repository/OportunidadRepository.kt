@@ -6,6 +6,7 @@ import com.example.gestion_movil.data.local.OportunidadDao
 import com.example.gestion_movil.data.local.OportunidadEntity
 import com.example.gestion_movil.data.local.OrganizacionDao
 import com.example.gestion_movil.data.local.OrganizacionEntity
+import com.example.gestion_movil.data.model.Responsable
 import kotlinx.coroutines.flow.Flow
 
 //
@@ -41,8 +42,11 @@ class OportunidadRepository(
     suspend fun guardar(oportunidad: OportunidadEntity): Long {
         val ahora = System.currentTimeMillis()
         val anterior = if (oportunidad.id != 0) dao.obtenerPorId(oportunidad.id) else null
-        val resultado = dao.guardar(oportunidad.copy(fechaActualizacion = ahora))
-        // @Upsert devuelve -1 cuando actualiza una fila que ya existía
+        val aGuardar = oportunidad.copy(
+            responsable = anterior?.responsable ?: oportunidad.responsable,
+            fechaActualizacion = ahora
+        )
+        val resultado = dao.guardar(aGuardar)
         val id = if (resultado == -1L) oportunidad.id.toLong() else resultado
         registrarCambios(id.toInt(), anterior, oportunidad, ahora)
         return id
@@ -73,5 +77,19 @@ class OportunidadRepository(
                 HistoriaEntity(oportunidadId = id, descripcion = descripcion, fecha = fecha)
             )
         }
+    }
+
+    suspend fun reasignarResponsable(id: Int, nuevo: String) {
+        val anterior = dao.obtenerPorId(id) ?: return
+        if (anterior.responsable == nuevo) return
+        val ahora = System.currentTimeMillis()
+        dao.actualizarResponsable(id, nuevo, ahora)
+        historiaDao.insertar(
+            HistoriaEntity(
+                oportunidadId = id,
+                descripcion = "Responsable: ${Responsable.mostrar(anterior.responsable)} -> ${Responsable.mostrar(nuevo)}",
+                fecha = ahora
+            )
+        )
     }
 }

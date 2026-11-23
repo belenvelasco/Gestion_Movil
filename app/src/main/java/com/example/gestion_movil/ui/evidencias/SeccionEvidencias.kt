@@ -60,7 +60,7 @@ fun SeccionEvidencias(
                 val esVideo = evidencia.tipo == EvidenciaEntity.VIDEO
                 val esDocumento = evidencia.tipo == EvidenciaEntity.DOCUMENTO
                 val etiqueta = when{
-                    esVideo -> "video"
+                    esVideo -> "Video"
                     esDocumento -> "Documento"
                     else -> "Foto"
                 }
@@ -79,7 +79,7 @@ fun SeccionEvidencias(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (esVideo) {
                         OutlinedButton(onClick = { videoAbierto = evidencia}) {
-                            Text("reprducirr")
+                            Text("Reproducir")
                         }
                     }
                     TextButton(onClick = { onEliminar(evidencia) }) { Text("Eliminar evidencia") }

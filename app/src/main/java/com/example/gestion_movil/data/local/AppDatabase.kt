@@ -58,7 +58,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "oportunidad.db"
-                ).addMigrations(MIGRACION_1_2)
+                ).addMigrations(MIGRACION_1_2, MIGRACION_5_6)
                     .fallbackToDestructiveMigration()
                     .build().also { INSTANCE = it }
             }

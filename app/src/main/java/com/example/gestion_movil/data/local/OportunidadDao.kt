@@ -24,5 +24,8 @@ interface OportunidadDao {
 
     @Delete
     suspend fun eliminar(oportunidad: OportunidadEntity)
+
+    @Query("UPDATE oportunidades SET responsable = :responsable, fechaActualizacion = :ahora WHERE id = :id")
+    suspend fun actualizarResponsable(id: Int, responsable: String, ahora: Long)
 }
 

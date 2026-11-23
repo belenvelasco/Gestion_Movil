@@ -190,6 +190,18 @@ class DetalleOportunidadViewModel(
         }
     }
 
+    fun reasignarResponsable(nuevo: String) {
+        val id = idActual.value
+        if (id == 0) return
+        viewModelScope.launch { oportunidadRepository.reasignarResponsable(id, nuevo) }
+    }
+
+    fun ajustarPrioridad(nueva: String) {
+        val actual = oportunidad.value ?: return
+        if (actual.prioridad == nueva) return
+        viewModelScope.launch { oportunidadRepository.guardar(actual.copy(prioridad = nueva)) }
+    }
+
     companion object {
         private const val OBLIGATORIO = "Campo obligatorio"
         private val CORREO = Regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
