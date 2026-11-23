@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.animation.*
+import com.example.gestion_movil.camara.CamaraLibreScreen
 import com.example.gestion_movil.ui.panel.PanelSupervisorScreen
 import com.example.gestion_movil.ui.panel.PanelSupervisorViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -52,6 +52,8 @@ object Rutas{
     const val EVENTOS = "eventos"
 
     const val CAMARA = "camara/{id}"
+
+    const val CAMERA_LIBRE = "camara_libre"
 
     const val PANEL = "panel"
 
@@ -105,6 +107,7 @@ fun AppNavigation(){
                 onVerOportunidades = {navController.navigate(Rutas.LISTA)},
                 onNuevaOportunidades = { navController.navigate(Rutas.form(0))},
                 onEscanerQr = { navController.navigate(Rutas.Qr)},
+                onCamera = {navController.navigate(Rutas.CAMERA_LIBRE)},
                 onVerCatalogo = {navController.navigate(Rutas.EVENTOS)},
                 onCerrarSesion = {
                     navController.navigate(Rutas.LOGIN){
@@ -148,6 +151,9 @@ fun AppNavigation(){
                 viewModel = evidenciaViewModel,
                 onVolver = { navController.popBackStack() }
             )
+        }
+        composable (Rutas.CAMERA_LIBRE) {
+            CamaraLibreScreen(onVolver = {navController.popBackStack()})
         }
 
         composable(Rutas.PANEL) {

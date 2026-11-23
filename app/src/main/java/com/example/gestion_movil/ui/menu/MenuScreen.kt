@@ -1,5 +1,6 @@
 package com.example.gestion_movil.ui.menu
 
+import androidx.camera.core.Camera
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ fun MenuScreen(
     onVerOportunidades: () -> Unit,
     onNuevaOportunidades: () -> Unit,
     onEscanerQr: () -> Unit,
+    onCamera: () -> Unit,
     onVerCatalogo: () -> Unit,
     onCerrarSesion: () -> Unit
 ) {
@@ -53,6 +55,9 @@ fun MenuScreen(
             }
             Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {
                 Text("Escanar codigo QR")
+            }
+            Button(onClick =  onCamera, modifier = Modifier.fillMaxWidth()) {
+                Text("camara (foto y video)")
             }
             Button(onClick = onVerCatalogo, modifier = Modifier.fillMaxWidth()) {
                 Text("Catologo de eventos")

@@ -8,6 +8,8 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -15,21 +17,40 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.example.gestion_movil.R
+import com.example.gestion_movil.ui.oportunidad.MensajeError
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
+import android.util.Size
+import androidx.camera.core.Camera
+import androidx.camera.core.FocusMeteringAction
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.pointer.pointerInput
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun QrScanner(
     onQrCodeScanned: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    linterna:Boolean = false,
+    zoom: Float = 0f
 ) {
+    var camara by remember { mutableStateOf<Camera?>(null) }
+    LaunchedEffect(camara, linterna) { camara?.cameraControl?.enableTorch(linterna) }
+    LaunchedEffect(camara, zoom) { camara?.cameraControl?.setLinearZoom(zoom) }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -50,8 +71,29 @@ fun QrScanner(
     // mostrar camara
     AndroidView(
         factory = { previewView },
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .pointerInput(Unit){
+                detectTapGestures { toque ->
+                    val punto = previewView.meteringPointFactory.createPoint(toque.x, toque.y)
+                    camara?.cameraControl?.startFocusAndMetering(
+                        FocusMeteringAction.Builder(punto).build()
+                    )
+                }
+            }
     )
+
+    val resolucion  = ResolutionSelector.Builder()
+        .setResolutionStrategy(
+            ResolutionStrategy(
+                Size(1280, 720),
+                ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
+            )
+        )
+    val imageAnalysis = ImageAnalysis.Builder()
+        .setResolutionSelector(resolucion)
+        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+        .build()
 
     // gestiona camara
     DisposableEffect(context, lifecycleOwner, previewView) {
@@ -168,12 +210,8 @@ fun QrScanner(
                         val cameraSelector =
                             CameraSelector.DEFAULT_BACK_CAMERA
 
-                        // Vincular Preview e ImageAnalysis
-                        cameraProvider.bindToLifecycle(
-                            lifecycleOwner,
-                            cameraSelector,
-                            preview,
-                            imageAnalysis
+                        camara = cameraProvider.bindToLifecycle(
+                            lifecycleOwner, cameraSelector, preview, imageAnalysis
                         )
 
                         boundProvider = cameraProvider

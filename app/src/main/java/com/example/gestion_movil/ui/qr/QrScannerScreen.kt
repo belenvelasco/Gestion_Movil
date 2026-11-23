@@ -34,6 +34,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.res.painterResource
 import com.example.gestion_movil.R
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Slider
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
 
 @Composable
 fun QrScannerScreen(
@@ -85,44 +93,56 @@ fun QrScannerScreen(
                 Text("Conceder permiso de cámara")
             }
         } else if (resultado == null) {
+            var linterna by remember { mutableStateOf(false) }
+            var zoom by remember { mutableFloatStateOf(0f) }
             Text(
                 "Escanea un código QR",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 12.dp)
             )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(400.dp)
+                    .weight(1f)
+                    .clip(RoundedCornerShape(16.dp))
             ) {
                 QrScanner(
                     onQrCodeScanned = { contenido ->
                         viewModel.onQrDetected(contenido)
                         Toast.makeText(context, "QR detectado", Toast.LENGTH_SHORT).show()
                     },
+                    linterna = linterna,
+                    zoom = zoom,
                     modifier = Modifier.fillMaxSize()
                 )
 
                 // Marco que ayuda a enfocar el código
                 Surface(
-                    modifier = Modifier
-                        .size(250.dp)
-                        .align(Alignment.Center),
+                    modifier = Modifier.size(250.dp).align(Alignment.Center),
                     color = Color.Transparent,
                     shape = MaterialTheme.shapes.medium,
                     border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
                 ) {}
             }
 
-            Spacer(Modifier.height(16.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                OutlinedButton(onClick = {linterna = !linterna}){
+                    Text(if (linterna) "Apagar linterna" else "Linterna")
+                }
+                Slider(value = zoom, onValueChange = {zoom = it}, modifier = Modifier.weight(1f))
+            }
             Text(
-                "Enfoca el código QR en el marco central",
-                style = MaterialTheme.typography.bodyMedium,
+                "Tocar la pantalla para enfocar · deslizar para acercar ",
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                "El código debe contener el número de código o el nombre exacto de una oportunidad",
+                "El codigo debe contener el numero de codigo o el nombre exacto de la oportunidad",
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
