@@ -127,7 +127,7 @@ fun AppNavigation(){
             ListaOportunidadesScreen(
                 viewModel = oportunidadViewModel,
                 onNueva = {navController.navigate(Rutas.form(0))},
-                onVerDetalle = {id -> navController.navigate(Rutas.form(id))}
+                onVerDetalle = {id -> navController.navigate(Rutas.detalle(id))}
             )
         }
 

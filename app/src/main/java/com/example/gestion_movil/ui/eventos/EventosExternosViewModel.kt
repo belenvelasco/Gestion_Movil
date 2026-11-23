@@ -93,7 +93,7 @@ class EventosExternosViewModel (
                     fuente = fuenteDe(evento),
                     prioridad = "Media",
                     potencial = "Media",
-                    estado = "Eventos identificado",
+                    estado = "Evento identificado",
                     observaciones = "",
                     fechaEvento = evento.fecha,
                     comuna = evento.comuna,
