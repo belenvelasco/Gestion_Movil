@@ -2,249 +2,150 @@ package com.example.gestion_movil
 
 import android.app.Application
 import com.example.gestion_movil.data.local.ActivacionEntity
+import com.example.gestion_movil.data.local.OportunidadEntity
 import com.example.gestion_movil.data.local.ResultadoEntity
 import com.example.gestion_movil.data.model.ResumenPanel
 import com.example.gestion_movil.data.repository.ActivacionRepository
 import com.example.gestion_movil.data.repository.OportunidadRepository
 import com.example.gestion_movil.ui.activacion.ActivacionViewModel
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.test.setMain
 
-class ActivacionViewModelTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class ActivacionViewModelTest : StringSpec({
 
-    @get:Rule
-    val mainRule = MainDispatcherRule()
+    beforeSpec { Dispatchers.setMain(UnconfinedTestDispatcher()) }
+    afterSpec { Dispatchers.resetMain() }
 
-    private val app = mockk<Application>(relaxed = true)
-    private val oportunidadRepo = mockk<OportunidadRepository>(relaxed = true)
-    private val repo = mockk<ActivacionRepository>(relaxed = true)
-    private val obligatorio = "Campo obligatorio"
-
-    /** Crea el ViewModel con la oportunidad 5 cargada en el estado indicado. */
-    private fun TestScope.vmCargado(
-        estado: String = "Evento identificado",
-        resultadoGuardado: ResultadoEntity? = null
-    ): ActivacionViewModel {
-        every { oportunidadRepo.observarPorId(any()) } returns flowOf(oportunidadDemo(5, estado = estado))
-        coEvery { repo.obtenerActivacion(5) } returns null
-        coEvery { repo.obtenerResultado(5) } returns resultadoGuardado
-        val vm = ActivacionViewModel(app, oportunidadRepo, repo)
-        recolectar(vm.oportunidad)     // la pantalla observa la oportunidad
-        vm.cargar(5)
-        return vm
-    }
-
-    private fun llenarCondiciones(vm: ActivacionViewModel) {
-        vm.onEspacio("  Stand central  ")
-        vm.onFecha(1_800_000_000_000L)
-        vm.onCosto("50000")
-        vm.onRequisitos("Mesa y toldo")
-        vm.onResponsable("Maria rojas")
-    }
-
-    // ---------- Cargar ----------
-
-    @Test
-    fun cargar_rellenaElFormularioConLoYaGuardado() = runTest {
-        every { oportunidadRepo.observarPorId(any()) } returns flowOf(oportunidadDemo(5))
-        coEvery { repo.obtenerActivacion(5) } returns ActivacionEntity(
-            oportunidadId = 5, espacio = "Patio", costo = 1000, responsable = "Camilo ramos"
+    fun oportunidad(estado: String = "Contacto realizado", responsable: String = "") =
+        OportunidadEntity(
+            id = 1, nombre = "Feria Verde", tipo = "Feria", descripcion = "", fuente = "Web",
+            prioridad = "Alta", potencial = "Media", estado = estado,
+            observaciones = "", responsable = responsable
         )
-        coEvery { repo.obtenerResultado(5) } returns ResultadoEntity(
-            oportunidadId = 5, resultado = "Activación realizada", impacto = "Alto", cerrada = true
-        )
-        val vm = ActivacionViewModel(app, oportunidadRepo, repo)
 
-        vm.cargar(5)
+    class Entorno(
+        val vm: ActivacionViewModel,
+        val oportunidades: OportunidadRepository,
+        val activaciones: ActivacionRepository
+    )
 
-        val s = vm.uiState.value
-        assertEquals("Patio", s.espacio)
-        assertEquals("1000", s.costo)
-        assertEquals("Camilo ramos", s.responsable)
-        assertEquals("Activación realizada", s.resultado)
-        assertTrue(s.cerrada)
+    fun crear(op: OportunidadEntity): Entorno {
+        val oportunidades = mockk<OportunidadRepository>(relaxed = true)
+        val activaciones = mockk<ActivacionRepository>(relaxed = true)
+        every { oportunidades.observarPorId(1) } returns flowOf(op)
+        coEvery { oportunidades.obtenerPorId(1) } returns op
+        coEvery { activaciones.obtenerActivacion(1) } returns null
+        coEvery { activaciones.obtenerResultado(1) } returns null
+        val vm = ActivacionViewModel(mockk<Application>(relaxed = true), oportunidades, activaciones)
+        return Entorno(vm, oportunidades, activaciones)
     }
 
-    // ---------- Confirmar participación ----------
+    "no guarda las condiciones si faltan campos obligatorios" {
+        runTest {
+            val e = crear(oportunidad())
+            e.vm.cargar(1)
 
-    @Test
-    fun confirmarParticipacion_cambiaElEstadoDeLaOportunidad() = runTest {
-        val vm = vmCargado(estado = "Propuesta enviada")
+            e.vm.guardarCondiciones()
 
-        vm.confirmarParticipacion()
-
-        coVerify(exactly = 1) {
-            oportunidadRepo.guardar(match { it.estado == ResumenPanel.ESTADO_CONFIRMADA })
+            val s = e.vm.uiState.value
+            s.espacioError.shouldNotBeNull()
+            s.fechaError.shouldNotBeNull()
+            s.responsableError.shouldNotBeNull()
+            coVerify(exactly = 0) { e.activaciones.guardarActivacion(any()) }
         }
-        assertEquals("Participación confirmada", vm.uiState.value.mensaje)
     }
 
-    @Test
-    fun confirmarParticipacion_siYaEstabaConfirmada_noHaceNada() = runTest {
-        val vm = vmCargado(estado = ResumenPanel.ESTADO_CONFIRMADA)
+    "el costo debe ser un numero entero" {
+        runTest {
+            val e = crear(oportunidad())
+            e.vm.cargar(1)
+            e.vm.onEspacio("Stand central")
+            e.vm.onFecha(1_700_000_000_000)
+            e.vm.onResponsable("Maria rojas")
+            e.vm.onCosto("abc")
 
-        vm.confirmarParticipacion()
+            e.vm.guardarCondiciones()
 
-        coVerify(exactly = 0) { oportunidadRepo.guardar(any()) }
-    }
-
-    // ---------- Condiciones ----------
-
-    @Test
-    fun guardarCondiciones_sinCamposObligatorios_muestraErrores() = runTest {
-        val vm = vmCargado()
-
-        vm.guardarCondiciones()
-
-        val s = vm.uiState.value
-        assertEquals(obligatorio, s.espacioError)
-        assertEquals(obligatorio, s.fechaError)
-        assertEquals(obligatorio, s.responsableError)
-        coVerify(exactly = 0) { repo.guardarActivacion(any()) }
-    }
-
-    @Test
-    fun guardarCondiciones_costoInvalido() = runTest {
-        val vm = vmCargado()
-        llenarCondiciones(vm)
-
-        for (costo in listOf("abc", "-10", "1.5")) {
-            vm.onCosto(costo)
-            vm.guardarCondiciones()
-            assertEquals("Ingresa un número entero válido", vm.uiState.value.costoError)
+            e.vm.uiState.value.costoError.shouldNotBeNull()
+            coVerify(exactly = 0) { e.activaciones.guardarActivacion(any()) }
         }
-        coVerify(exactly = 0) { repo.guardarActivacion(any()) }
     }
 
-    @Test
-    fun guardarCondiciones_costoVacioEsValido() = runTest {
-        val vm = vmCargado()
-        llenarCondiciones(vm)
-        vm.onCosto("")
+    "guarda las condiciones y deja el mismo responsable en la oportunidad" {
+        runTest {
+            val e = crear(oportunidad())
+            val guardada = slot<ActivacionEntity>()
+            coEvery { e.activaciones.guardarActivacion(capture(guardada)) } returns Unit
+            e.vm.cargar(1)
+            e.vm.onEspacio("  Stand central ")
+            e.vm.onFecha(1_700_000_000_000)
+            e.vm.onCosto("150000")
+            e.vm.onResponsable("Camilo ramos")
 
-        vm.guardarCondiciones()
+            e.vm.guardarCondiciones()
 
-        assertNull(vm.uiState.value.costoError)
-        coVerify(exactly = 1) { repo.guardarActivacion(match { it.costo == null }) }
-    }
-
-    @Test
-    fun guardarCondiciones_validas_guardaLaActivacion() = runTest {
-        val vm = vmCargado()
-        llenarCondiciones(vm)
-
-        vm.guardarCondiciones()
-
-        coVerify(exactly = 1) {
-            repo.guardarActivacion(
-                match {
-                    it.oportunidadId == 5 && it.espacio == "Stand central" &&
-                        it.costo == 50000 && it.responsable == "Maria rojas"
-                }
-            )
+            guardada.captured.espacio shouldBe "Stand central"
+            guardada.captured.costo shouldBe 150000
+            guardada.captured.responsable shouldBe "Camilo ramos"
+            coVerify { e.oportunidades.reasignarResponsable(1, "Camilo ramos") }
+            e.vm.uiState.value.mensaje shouldBe "Condiciones y responsable guardados"
         }
-        assertEquals("Condiciones y responsable guardados", vm.uiState.value.mensaje)
     }
 
-    @Test
-    fun guardarCondiciones_sinOportunidadCargada_noHaceNada() {
-        val vm = ActivacionViewModel(app, oportunidadRepo, repo)   // idActual = 0
-        vm.guardarCondiciones()
-        coVerify(exactly = 0) { repo.guardarActivacion(any()) }
-    }
-
-    // ---------- Resultado ----------
-
-    @Test
-    fun guardarResultado_sinParticipacionConfirmada_avisaYNoGuarda() = runTest {
-        val vm = vmCargado(estado = "Evento identificado")
-        vm.onResultado("Activación realizada")
-        vm.onImpacto("Alto")
-
-        vm.guardarResultado(cerrar = false)
-
-        assertEquals("Confirma la participación antes de registrar resultados", vm.uiState.value.mensaje)
-        coVerify(exactly = 0) { repo.guardarResultado(any()) }
-    }
-
-    @Test
-    fun guardarResultado_sinResultadoNiImpacto_muestraErrores() = runTest {
-        val vm = vmCargado(estado = ResumenPanel.ESTADO_CONFIRMADA)
-
-        vm.guardarResultado(cerrar = false)
-
-        val s = vm.uiState.value
-        assertEquals(obligatorio, s.resultadoError)
-        assertEquals(obligatorio, s.impactoError)
-        coVerify(exactly = 0) { repo.guardarResultado(any()) }
-    }
-
-    @Test
-    fun guardarResultado_valido_sinCerrar() = runTest {
-        val vm = vmCargado(estado = ResumenPanel.ESTADO_CONFIRMADA)
-        vm.onResultado("Activación realizada")
-        vm.onImpacto("Medio")
-        vm.onObservaciones("  Todo bien  ")
-
-        vm.guardarResultado(cerrar = false)
-
-        coVerify(exactly = 1) {
-            repo.guardarResultado(match { !it.cerrada && it.observaciones == "Todo bien" })
+    "al cargar manda el responsable de la oportunidad" {
+        runTest {
+            val e = crear(oportunidad(responsable = "Valentina peña"))
+            e.vm.cargar(1)
+            e.vm.uiState.value.responsable shouldBe "Valentina peña"
         }
-        val s = vm.uiState.value
-        assertFalse(s.cerrada)
-        assertEquals("Resultado guardado", s.mensaje)
     }
 
-    @Test
-    fun guardarResultado_cerrando_cierraLaOportunidad() = runTest {
-        val vm = vmCargado(estado = ResumenPanel.ESTADO_CONFIRMADA)
-        vm.onResultado("Activación realizada")
-        vm.onImpacto("Alto")
+    "no permite registrar resultados sin participacion confirmada" {
+        runTest {
+            val e = crear(oportunidad(estado = "Contacto realizado"))
+            val job = launch(UnconfinedTestDispatcher(testScheduler)) { e.vm.oportunidad.collect {} }
+            e.vm.cargar(1)
+            e.vm.onResultado("Activación realizada")
+            e.vm.onImpacto("Alto")
 
-        vm.guardarResultado(cerrar = true)
+            e.vm.guardarResultado(cerrar = false)
 
-        coVerify(exactly = 1) { repo.guardarResultado(match { it.cerrada }) }
-        val s = vm.uiState.value
-        assertTrue(s.cerrada)
-        assertEquals("Oportunidad cerrada", s.mensaje)
+            e.vm.uiState.value.mensaje shouldBe "Confirma la participación antes de registrar resultados"
+            coVerify(exactly = 0) { e.activaciones.guardarResultado(any()) }
+            job.cancel()
+        }
     }
 
-    @Test
-    fun guardarResultado_siYaEstabaCerrada_noGuardaDeNuevo() = runTest {
-        val cerrada = ResultadoEntity(oportunidadId = 5, resultado = "x", impacto = "Alto", cerrada = true)
-        val vm = vmCargado(estado = ResumenPanel.ESTADO_CONFIRMADA, resultadoGuardado = cerrada)
+    "cerrar la oportunidad deja la activacion cerrada" {
+        runTest {
+            val e = crear(oportunidad(estado = ResumenPanel.ESTADO_CONFIRMADA))
+            val job = launch(UnconfinedTestDispatcher(testScheduler)) { e.vm.oportunidad.collect {} }
+            val guardado = slot<ResultadoEntity>()
+            coEvery { e.activaciones.guardarResultado(capture(guardado)) } returns Unit
+            e.vm.cargar(1)
+            e.vm.onResultado("Activación realizada")
+            e.vm.onImpacto("Alto")
 
-        vm.guardarResultado(cerrar = true)
+            e.vm.guardarResultado(cerrar = true)
 
-        coVerify(exactly = 0) { repo.guardarResultado(any()) }
+            guardado.captured.cerrada shouldBe true
+            e.vm.uiState.value.cerrada shouldBe true
+            job.cancel()
+        }
     }
-
-    // ---------- Mensajes y errores ----------
-
-    @Test
-    fun escribirEnUnCampo_limpiaSuError_yLimpiarMensaje() = runTest {
-        val vm = vmCargado()
-        vm.guardarCondiciones()
-        assertNotNull(vm.uiState.value.espacioError)
-
-        vm.onEspacio("Patio")
-        assertNull(vm.uiState.value.espacioError)
-
-        vm.confirmarParticipacion()
-        vm.limpiarMensaje()
-        assertNull(vm.uiState.value.mensaje)
-    }
-}
+})

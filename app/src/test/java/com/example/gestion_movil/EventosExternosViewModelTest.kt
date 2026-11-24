@@ -88,10 +88,10 @@ class EventosExternosViewModelTest {
             oportunidadRepo.guardar(
                 match {
                     it.nombre == "Evento 4" &&
-                        it.estado == "Evento identificado" &&
-                        it.prioridad == "Media" &&
-                        it.organizacionId == 12 &&
-                        it.fuente == EventosExternosViewModel.fuenteDe(e)
+                            it.estado == "Evento identificado" &&
+                            it.prioridad == "Media" &&
+                            it.organizacionId == 12 &&
+                            it.fuente == EventosExternosViewModel.fuenteDe(e)
                 }
             )
         }

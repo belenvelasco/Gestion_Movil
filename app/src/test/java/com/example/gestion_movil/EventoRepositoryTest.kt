@@ -1,5 +1,6 @@
 package com.example.gestion_movil
 
+
 import com.example.gestion_movil.data.remote.AddressDto
 import com.example.gestion_movil.data.remote.ApiService
 import com.example.gestion_movil.data.remote.CompanyDto
@@ -71,3 +72,4 @@ class EventoRepositoryTest {
         repo.obtenerEventos()
     }
 }
+

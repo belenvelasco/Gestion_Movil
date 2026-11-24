@@ -1,5 +1,4 @@
 package com.example.gestion_movil
-
 import android.app.Application
 import com.example.gestion_movil.data.local.EvidenciaEntity
 import com.example.gestion_movil.data.repository.EvidenciaRepository
@@ -29,7 +28,7 @@ class EvidenciaViewModelTest {
             repo.agregar(
                 match {
                     it.oportunidadId == 5 && it.tipo == EvidenciaEntity.FOTO &&
-                        it.ruta == "/ruta/foto.jpg" && it.nombre == "Stand"
+                            it.ruta == "/ruta/foto.jpg" && it.nombre == "Stand"
                 }
             )
         }
