@@ -18,13 +18,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.gestion_movil.util.Fechas
+import com.example.gestion_movil.data.model.ResumenPanel
 
 @Composable
 fun PanelSupervisorScreen(
     viewModel: PanelSupervisorViewModel,
     onVerDetalle: (Int) -> Unit
 ) {
+
     val resumen by viewModel.resumen.collectAsState()
+    PanelSupervisorContenido(resumen = resumen, onVerDetalle = onVerDetalle)
+}
+
+// Parte visual sin ViewModel: así se puede probar con Compose UI Test
+@Composable
+fun PanelSupervisorContenido(
+    resumen: ResumenPanel,
+    onVerDetalle: (Int) -> Unit
+) {
 
     Column(
         modifier = Modifier

@@ -62,7 +62,7 @@ abstract class AppDatabase : RoomDatabase() {
                     .fallbackToDestructiveMigration()
                     .build().also { INSTANCE = it }
             }
-        private val MIGRACION_5_6 = object : Migration(5, 6) {
+         val MIGRACION_5_6 = object : Migration(5, 6) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE evidencias ADD COLUMN nombre TEXT NOT NULL DEFAULT ''")
                 db.execSQL(
