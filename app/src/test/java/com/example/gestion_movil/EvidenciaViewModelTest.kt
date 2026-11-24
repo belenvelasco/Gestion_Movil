@@ -8,6 +8,10 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import org.junit.Rule
 import org.junit.Test
+import io.mockk.every
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertTrue
 
 class EvidenciaViewModelTest {
 
@@ -39,4 +43,13 @@ class EvidenciaViewModelTest {
 
         coVerify(exactly = 1) { repo.eliminar(e) }
     }
+
+    @Test
+    fun alIniciar_laListaDeEvidenciasEstaVacia() = runTest {
+        every { repo.evidencias(any()) } returns flowOf(emptyList())
+        recolectar(vm.evidencias)
+
+        assertTrue(vm.evidencias.value.isEmpty())
+    }
+
 }

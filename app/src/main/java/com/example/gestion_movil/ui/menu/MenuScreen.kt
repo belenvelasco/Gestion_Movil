@@ -55,7 +55,7 @@ fun MenuScreen(
                 Text("Nueva oportunidad")
             }
             Button(onClick = onEscanerQr, modifier = Modifier.fillMaxWidth()) {
-                Text("Escanar código QR")
+                Text("Escanear código QR")
             }
             Button(onClick =  onCamera, modifier = Modifier.fillMaxWidth()) {
                 Text("Cámara (foto y video)")
