@@ -80,6 +80,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.kotest:kotest-assertions-core:5.9.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+
     // Permite que los tests JUnit 4 existentes sigan corriendo junto a JUnit 5
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.10.0")
     testImplementation("io.mockk:mockk:1.14.12")
