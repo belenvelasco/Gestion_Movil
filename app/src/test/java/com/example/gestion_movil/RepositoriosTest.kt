@@ -59,7 +59,7 @@ class OportunidadRepositoryTest {
             historiaDao.insertar(match { it.descripcion == "Estado: Evento identificado -> Contacto pendiente" })
         }
         coVerify(exactly = 1) {
-            historiaDao.insertar(match { it.descripcion == "prioridad: Baja -> Alta" })
+            historiaDao.insertar(match { it.descripcion == "Prioridad: Baja -> Alta" })
         }
     }
 
