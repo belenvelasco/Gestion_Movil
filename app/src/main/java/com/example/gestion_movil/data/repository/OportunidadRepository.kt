@@ -69,7 +69,10 @@ class OportunidadRepository(
                 cambios += "Estado: ${anterior.estado} -> ${nuevo.estado}"
             }
             if(anterior.prioridad != nuevo.prioridad){
-                cambios += "prioridad: ${anterior.prioridad} -> ${nuevo.prioridad}"
+                cambios += "Prioridad: ${anterior.prioridad} -> ${nuevo.prioridad}"
+            }
+            if (anterior.potencial != nuevo.potencial) {
+                cambios += "Potencial: ${anterior.potencial} -> ${nuevo.potencial}"
             }
         }
         cambios.forEach { descripcion ->

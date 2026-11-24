@@ -62,6 +62,7 @@ class OportunidadViewModel(
                         o.descripcion.contains(q, ignoreCase = true) ||
                         o.fuente.contains(q, ignoreCase = true) ||
                         o.comuna.contains(q, ignoreCase = true) ||
+                        o.responsable.contains(q, ignoreCase = true) ||
                         (organizaciones[o.organizacionId] ?: "").contains(q, ignoreCase = true)
                 coincidePrioridad && coincideTexto
             }

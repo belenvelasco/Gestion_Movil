@@ -1,5 +1,7 @@
 package com.example.gestion_movil.ui.activacion
 
+
+import com.example.gestion_movil.data.model.Responsable
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -59,6 +61,7 @@ class ActivacionViewModel(
 
     val resultados = listOf("Activación realizada", "Activación postergada", "Activación cancelada")
     val impactos = listOf("Alto", "Medio", "Bajo")
+    val responsables = Responsable.LISTA
 
     private val idActual = MutableStateFlow(0)
 
@@ -75,12 +78,14 @@ class ActivacionViewModel(
         viewModelScope.launch {
             val activacion = repository.obtenerActivacion(id)
             val resultado = repository.obtenerResultado(id)
+            val actual = oportunidadRepository.obtenerPorId(id)
             _uiState.value = ActivacionUiState(
                 espacio = activacion?.espacio ?: "",
                 fecha = activacion?.fechaActivacion,
                 costo = activacion?.costo?.toString() ?: "",
                 requisitos = activacion?.requisitos ?: "",
-                responsable = activacion?.responsable ?: "",
+                responsable = actual?.responsable?.takeIf { !Responsable.estaVacio(it) }
+                    ?: activacion?.responsable ?: "",
                 resultado = resultado?.resultado ?: "",
                 observaciones = resultado?.observaciones ?: "",
                 impacto = resultado?.impacto ?: "",
@@ -147,6 +152,7 @@ class ActivacionViewModel(
                     responsable = s.responsable.trim()
                 )
             )
+            oportunidadRepository.reasignarResponsable(id, s.responsable.trim())
             _uiState.update { it.copy(mensaje = "Condiciones y responsable guardados") }
         }
     }

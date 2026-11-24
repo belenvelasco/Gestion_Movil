@@ -141,14 +141,12 @@ fun ActivacionScreen(
             minLines = 2,
             modifier = Modifier.fillMaxWidth()
         )
-        OutlinedTextField(
-            value = estado.responsable,
-            onValueChange = viewModel::onResponsable,
-            label = { Text("Responsable") },
-            enabled = !bloqueada,
-            isError = estado.responsableError != null,
-            supportingText = { Text(estado.responsableError ?: "") },
-            modifier = Modifier.fillMaxWidth()
+        CampoDesplegable(
+            label = "Responsable",
+            valor = estado.responsable,
+            opciones = viewModel.responsables,
+            error = estado.responsableError,
+            onSeleccion = { if (!bloqueada) viewModel.onResponsable(it) }
         )
         if (!bloqueada) {
             Button(

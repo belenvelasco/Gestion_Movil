@@ -67,6 +67,18 @@ fun PanelSupervisorContenido(
             FilaConteo(prioridad, cantidad)
         }
 
+        Text("Por responsable (abiertas)", style = MaterialTheme.typography.titleMedium)
+        resumen.porResponsable.forEach { (responsable, cantidad) ->
+            FilaConteo(responsable, cantidad)
+        }
+        if (resumen.altaSinResponsable > 0) {
+            Text(
+                "Alta prioridad sin responsable: ${resumen.altaSinResponsable}",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
         Text("Próximos eventos", style = MaterialTheme.typography.titleMedium)
         if (resumen.proximosEventos.isEmpty()) {
             Text("No hay eventos próximos.", style = MaterialTheme.typography.bodyMedium)

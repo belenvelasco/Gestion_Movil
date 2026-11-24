@@ -41,7 +41,7 @@ fun DetalleOportunidadScreen(
     onAbrirCamara:(Int) -> Unit,
     onAbrirActivacion: (Int) -> Unit,
 
-) {
+    ) {
     val oportunidad by viewModel.oportunidad.collectAsState()
     val organizacion by viewModel.organizacion.collectAsState()
     val contactos by viewModel.contactos.collectAsState()
@@ -49,7 +49,7 @@ fun DetalleOportunidadScreen(
     val historial by viewModel.historial.collectAsState()
     val estado by viewModel.uiState.collectAsState()
 
-val evidencias by evidenciaViewModel.evidencias.collectAsState()
+    val evidencias by evidenciaViewModel.evidencias.collectAsState()
     LaunchedEffect(id) {
         viewModel.cargar(id)
         evidenciaViewModel.cargar(id)
@@ -79,9 +79,16 @@ val evidencias by evidenciaViewModel.evidencias.collectAsState()
                     onSeleccion = { viewModel.ajustarPrioridad(it) }
                 )
                 CampoDesplegable(
+                    label = "Potencial comercial",
+                    valor = actual.potencial,
+                    opciones = ResumenPanel.PRIORIDADES,
+                    error = null,
+                    onSeleccion = { viewModel.ajustarPotencial(it) }
+                )
+                CampoDesplegable(
                     label = "Responsable",
                     valor = Responsable.mostrar(actual.responsable),
-                    opciones = Responsable.LISTA,
+                    opciones = Responsable.OPCIONES,
                     error = null,
                     onSeleccion = { viewModel.reasignarResponsable(it) }
                 )
@@ -325,4 +332,6 @@ private fun TarjetaContacto(contacto: ContactoEntity, onEliminar: () -> Unit) {
     }
 
 }
+
+
 

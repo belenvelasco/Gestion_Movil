@@ -1,5 +1,6 @@
 package com.example.gestion_movil.ui.oportunidad
 
+import com.example.gestion_movil.data.model.Responsable
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -193,7 +194,13 @@ class DetalleOportunidadViewModel(
     fun reasignarResponsable(nuevo: String) {
         val id = idActual.value
         if (id == 0) return
-        viewModelScope.launch { oportunidadRepository.reasignarResponsable(id, nuevo) }
+        viewModelScope.launch { oportunidadRepository.reasignarResponsable(id, Responsable.aGuardar(nuevo)) }
+    }
+
+    fun ajustarPotencial(nuevo: String) {
+        val actual = oportunidad.value ?: return
+        if (actual.potencial == nuevo) return
+        viewModelScope.launch { oportunidadRepository.guardar(actual.copy(potencial = nuevo)) }
     }
 
     fun ajustarPrioridad(nueva: String) {
